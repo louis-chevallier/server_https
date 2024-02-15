@@ -37,9 +37,11 @@ localDir = os.path.join(fileDir, '.')
 rootDir = os.path.join(localDir, "html")
 EKOX(rootDir)
 
-port = 8082
+port = 8092
 if "PORT" in os.environ :
     port = int(os.environ["PORT"])
+
+MDP = os.environ["MDP"]
 
 config = {
   '/' : {
@@ -74,7 +76,15 @@ class App:
             i = os.environ[gi] if gi in os.environ else ""
             return gi + "=" + i
         return read('GITINFO') + ", " + read("HOST") + ", " + read("DATE")
-        
+
+
+    def status(self, rep) :
+        with open(os.path.join(rootDir, "index.html"), "r") as file :
+            data = file.read()
+            data = data.replace("INFO", rep)
+            data = re.sub("<p>[\w\W.]*</p>", "", data)
+            return data
+    
     @cherrypy.expose
     def index(self):
         with open(os.path.join(rootDir, "index.html"), "r") as file :
@@ -83,12 +93,26 @@ class App:
             data = data.replace("INFO", self.info())
             EKOX(data)
             return data
-        
-    @cherrypy.expose
-    def alarm_off(self):   self.alarm("HOME_MODE")
 
     @cherrypy.expose
-    def alarm_on(self):   self.alarm("AWAY_MODE")
+    def test(self):
+        EKOT(" ==================== TEST =====================")
+        return 'ok'
+
+    @cherrypy.expose
+    def alarm_off(self, mdp):
+        if mdp == MDP :
+            return self.alarm("HOME_MODE")
+        else :
+            return self.status("fail")
+
+    @cherrypy.expose
+    def alarm_on(self, mdp):
+        if mdp == MDP :
+            return self.alarm("AWAY_MODE")
+        else :
+            return self.status("fail")
+
 
     
     @cherrypy.expose
@@ -117,7 +141,7 @@ class App:
             result = str(e)
         r = result
         EKOX(r)
-        return r
+        return self.status(r)
         
     @cherrypy.expose
     def log(self, data=None) :

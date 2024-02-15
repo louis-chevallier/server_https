@@ -1,36 +1,35 @@
 
 <!DOCTYPE html>
 <html>
+  <style>
+    body { font-size: 100px; }
+    @media only screen and (max-width: 600px) {
+        body { font-size: 32px; }            
+    }
+
+  </style>
+  
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>NUC</title>
-    <style>
-    .bb {
-        font-size: 80px;
-    }
     </style>
   </head>
-  <body>
-    <script src="js/lclog.js" charset="utf-8"></script>    
-    <script type="module" src='js/contenu.js'>    </script>
-    <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
-    <script src="js/common/ndarray-browser-min.js"></script>
+<body>
+  <script src="js/lclog.js" charset="utf-8"></script>    
+  <script type="module" src='js/contenu.js'>    </script>
+  <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
+  <script src="js/common/ndarray-browser-min.js"></script>
     <script src="js/common/image-loader.js"></script>
     
     INFO
-     <ul>
-       <li>  <a href="http://192.168.1.38:8083/sensor.html">Température</a></li>
-       <li>  <a href="http://176.161.19.7:8080">Garage</a></li>
-       <li>	 
-	 <button id="alarm-on">Activer l'alarme</button>
-       </li>
-       <li>
-	 <button id="alarm-off">Désactiver l'alarme</button>
-       </li>
-       
-       <li>  <a href="/var/www/html/Audio">Audio</a></li>
-       <li>  <a href="linked.html">links</a></li>
-     </ul> 
+    <p>
+      <ul>
+        <li>  <a href="http://176.161.19.7:8093/sensor.html">Température</a></li>
+        <li>  <a href="http://176.161.19.7:8080">Garage</a></li>
+        <li>  <a href="/var/www/html/Audio">Audio</a></li>
+        <li>  <a href="linked.html">links</a></li>
+      </ul>
+    </p>
    
   </body>
 </html>

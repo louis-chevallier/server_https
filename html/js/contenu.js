@@ -1,4 +1,7 @@
 
+const isMobile = navigator.userAgentData.mobile; //resolves true/false
+
+
 let camera, renderer, cameraControls;
 let mouseX = 0, mouseY = 0;
 let windowHalfX = window.innerWidth / 2;
