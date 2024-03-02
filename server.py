@@ -113,7 +113,6 @@ class App:
         else :
             return self.status("fail")
 
-
     
     @cherrypy.expose
     def alarm(self, onoff):

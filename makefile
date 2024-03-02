@@ -8,12 +8,15 @@ export GITINFO=$(shell git log --pretty=format:"%h - %an, %ar : %s" -1)
 
 start : server_nuc
 
-server_nuc : privkey.pem  privkey.pem
+server_nuc : pem 
 #	ip -f inet addr show eth1 | awk '/inet / {print https://$2:8080}'
 	python -c 'import server; server.go()'
 run :
 	date
 	source ${HOME}/scripts/.bashrc; spy; pyenv; make server_nuc
+
+
+pem : privkey.pem  privkey.pem
 
 %.pem :
 # https://docs.cherrypy.dev/en/latest/deploy.html
