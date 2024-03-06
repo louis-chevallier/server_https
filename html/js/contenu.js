@@ -1,5 +1,41 @@
 
-const isMobile = navigator.userAgentData.mobile; //resolves true/false
+
+//console.log(document.navigator.userAgentData.brands);
+
+
+//const detailedUserAgentData = await window.navigator.userAgentData. then(d => { EKOX(d) });
+
+
+
+//const isMobile = window.navigator.userAgentData.mobile; //resolves true/false
+//EKOX(isMobile)
+
+
+function arbre() {
+    EKOX("")
+    // prettier-ignore
+    let data = [{ "id": "0", "text": "node-0", "children": [{ "id": "0-0", "text": "node-0-0", "children": [{ "id": "0-0-0", "text": "node-0-0-0" }, { "id": "0-0-1", "text": "node-0-0-1" }, { "id": "0-0-2", "text": "node-0-0-2" }] }, { "id": "0-1", "text": "node-0-1", "children": [{ "id": "0-1-0", "text": "node-0-1-0" }, { "id": "0-1-1", "text": "node-0-1-1" }, { "id": "0-1-2", "text": "node-0-1-2" }] }, { "id": "0-2", "text": "node-0-2", "children": [{ "id": "0-2-0", "text": "node-0-2-0" }, { "id": "0-2-1", "text": "node-0-2-1" }, { "id": "0-2-2", "text": "node-0-2-2" }] }] }, { "id": "1", "text": "node-1", "children": [{ "id": "1-0", "text": "node-1-0", "children": [{ "id": "1-0-0", "text": "node-1-0-0" }, { "id": "1-0-1", "text": "node-1-0-1" }, { "id": "1-0-2", "text": "node-1-0-2" }] }, { "id": "1-1", "text": "node-1-1", "children": [{ "id": "1-1-0", "text": "node-1-1-0" }, { "id": "1-1-1", "text": "node-1-1-1" }, { "id": "1-1-2", "text": "node-1-1-2" }] }, { "id": "1-2", "text": "node-1-2", "children": [{ "id": "1-2-0", "text": "node-1-2-0" }, { "id": "1-2-1", "text": "node-1-2-1" }, { "id": "1-2-2", "text": "node-1-2-2" }] }] }, { "id": "2", "text": "node-2", "children": [{ "id": "2-0", "text": "node-2-0", "children": [{ "id": "2-0-0", "text": "node-2-0-0" }, { "id": "2-0-1", "text": "node-2-0-1" }, { "id": "2-0-2", "text": "node-2-0-2" }] }, { "id": "2-1", "text": "node-2-1", "children": [{ "id": "2-1-0", "text": "node-2-1-0" }, { "id": "2-1-1", "text": "node-2-1-1" }, { "id": "2-1-2", "text": "node-2-1-2" }] }, { "id": "2-2", "text": "node-2-2", "children": [{ "id": "2-2-0", "text": "node-2-2-0" }, { "id": "2-2-1", "text": "node-2-2-1" }, { "id": "2-2-2", "text": "node-2-2-2" }] }] }]
+
+
+    let tree = new Tree('.container',
+                        {
+                            data: [{ id: '-1', text: 'root', children: data }],
+                            closeDepth: 3,
+                            loaded: function () {
+                                this.values = ['0-0-0', '0-1-1'];
+                                console.log(this.selectedNodes);
+                                console.log(this.values);
+                                this.disables = ['0-0-0', '0-0-1', '0-0-2']
+                            },
+                            onChange: function () {
+                                console.log(this.values);
+                            }
+                        })
+}
+
+arbre();
+
+
 
 
 let camera, renderer, cameraControls;
@@ -171,6 +207,7 @@ async function alarmf(alarm_on, button) {
     xhr1.open("GET", "alarm?onoff=" + onoff );
     xhr1.send();
 }
+
 
 EKOX("starting");
 

@@ -26,7 +26,7 @@ function EKOT(...txt) {
     console.log(s);    
     try {
         const xhr1 = new XMLHttpRequest();
-        xhr1.open("GET", "log?data=" + s);
+        xhr1.open("GET", "/log?data=" + s);
         xhr1.send();
     } catch (err) {
     }
@@ -37,7 +37,7 @@ function EKOX(...txt) {
         const s = LOGS(2, ...txt);    
         console.log(s);    
         const xhr1 = new XMLHttpRequest();
-        xhr1.open("GET", "log?data=" + s);
+        xhr1.open("GET", "/log?data=" + s);
         xhr1.send();
     } catch (err) {
     }

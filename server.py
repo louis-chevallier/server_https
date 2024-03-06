@@ -84,6 +84,40 @@ class App:
             data = data.replace("INFO", rep)
             data = re.sub("<p>[\w\W.]*</p>", "", data)
             return data
+
+    @cherrypy.expose
+    def audio_list(self, data=None):
+        EKO()
+        
+        def ddd(path, f, ldddds=[]) :
+            d = { "id" : os.path.join(path, f), "text" : f, "node" : os.path.join(path, f) }
+            if len(ldddds) > 0  :
+                d["children"] = ldddds
+            return d
+
+        def tree(path):
+            files = [ ddd(path, f)      for f in os.listdir(path) if os.path.isfile(os.path.join(path, f)) ]
+            dirs =  [ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
+            return files + dirs
+        
+        r = "http://176.161.19.7:9000/Audio/"
+        rr = "/var/www/html/"
+        path = os.path.join(rr, "Audio")
+        EKO()
+        dd = { "id" : "0", "text" : "root", "node" : "", "children" : tree(path)}
+        EKO()
+        r1 = "http://192.168.1.38/"
+        l = [ { "name" :  "%s_%s" % (os.path.basename(root) , i),
+                "artist" : "%s_%s" % (os.path.basename(root) , i),
+                "image" : "",
+                "path" :  r1 + os.path.join(root, fn).replace(rr, '')    } for root, d_names,f_names in os.walk(path) for i, fn in enumerate(sorted(f_names))]
+        d = { "status" : "ok", "list" : l, "dict" : tree(path)  }
+
+        #EKOX(dd)
+        
+        sd = json.dumps(d)
+        return sd
+
     
     @cherrypy.expose
     def index(self):
@@ -91,7 +125,7 @@ class App:
             EKOT("main")
             data = file.read()
             data = data.replace("INFO", self.info())
-            EKOX(data)
+            #EKOX(data)
             return data
 
     @cherrypy.expose
@@ -173,8 +207,6 @@ def go() :
 
     hostname = socket.gethostname()
     IPAddr = socket.gethostbyname(hostname)
-
-
 
 
     batcmd="dir"
