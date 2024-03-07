@@ -107,7 +107,7 @@ class App:
         dd = { "id" : "0", "text" : "root", "node" : "", "children" : tree(path)}
         EKO()
         r1 = "http://192.168.1.38/"
-        l = [ { "name" :  "%s_%s" % (os.path.basename(root) , i),
+        l = [ { "name" :  "%s_%s" % (os.path.basename(root) + "\n" + fn , i),
                 "artist" : "%s_%s" % (os.path.basename(root) , i),
                 "image" : "",
                 "path" :  r1 + os.path.join(root, fn).replace(rr, '')    } for root, d_names,f_names in os.walk(path) for i, fn in enumerate(sorted(f_names))]

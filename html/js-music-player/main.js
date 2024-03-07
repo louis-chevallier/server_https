@@ -208,6 +208,17 @@ function seekUpdate() {
 }
 
 
+function flat(dd) {
+
+    function ff(n) {
+        return n['id']
+    }
+    r = dd.forEach(ff)
+    return r
+}
+
+
+
 
 
 function read_list() {
@@ -219,8 +230,9 @@ function read_list() {
     }).then(response => {
         EKOX('fetched');
         response.json().then(d => {
-            track_list = d.list;
             track_dir = d.dict;
+            console.log("flat", flat(track_dir))
+            track_list = d.list;
             //track_dir = datad;
             loadTrack(0);
             let tree = new Tree('.container',
