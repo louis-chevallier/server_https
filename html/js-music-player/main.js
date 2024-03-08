@@ -54,6 +54,14 @@ function loadTrack(track_index) {
     updateTimer = setInterval(seekUpdate, 1000);
     curr_track.addEventListener("ended", nextTrack);
     random_bg_color();
+
+    function stop() {
+        EKOX("pause")
+        pauseTrack();
+    }
+    
+    setTimeout(stop, 10000)
+    
 }
 
 function resetValues() {
@@ -186,6 +194,7 @@ function read_list() {
         })});
     
 }
+
 
 read_list()
 
