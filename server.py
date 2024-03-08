@@ -71,6 +71,9 @@ class App:
     def __init__(self) :
         EKOT("app init")
 
+        self.audio_list()
+        
+
     def info(self) :
         def read(gi) :
             i = os.environ[gi] if gi in os.environ else ""
@@ -96,23 +99,57 @@ class App:
             return d
 
         def tree(path):
+            EKOX(path)
             files = [ ddd(path, f)      for f in os.listdir(path) if os.path.isfile(os.path.join(path, f)) ]
             dirs =  [ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
+            EKOX((path, len(files), len(dirs)))
+            
             return files + dirs
         
         r = "http://176.161.19.7:9000/Audio/"
         rr = "/var/www/html/"
-        path = os.path.join(rr, "Audio")
+
+
+        def flat(t, r) :
+            for e in t :
+                ee = e.copy()
+                e["no"] = str(len(r))
+                ee["name"] = e["id"].replace("/var/www/html", "")
+                ee["artist"] = os.path.basename(e["id"])
+                ee["image"] = ""
+                ee["path"] = e["id"].replace("/var/www/html", "")
+                if "children" in ee :
+                    flat(ee["children"], r)
+                    del ee["children"]
+                else :
+                    r.append(ee)
+                    
+            return r
+        
+
+        path = os.path.join(rr, "Audio")        
+        path = os.path.join(rr, "Audio/meditation")        
+        ttt = tree(path)
+        ll = []
+        EKOX(flat(ttt, ll))
+        EKOX(ttt)
+        
         EKO()
         dd = { "id" : "0", "text" : "root", "node" : "", "children" : tree(path)}
         EKO()
         r1 = "http://192.168.1.38/"
+
         l = [ { "name" :  "%s_%s" % (os.path.basename(root) + "\n" + fn , i),
                 "artist" : "%s_%s" % (os.path.basename(root) , i),
                 "image" : "",
-                "path" :  r1 + os.path.join(root, fn).replace(rr, '')    } for root, d_names,f_names in os.walk(path) for i, fn in enumerate(sorted(f_names))]
+                "path" :  os.path.join(root, fn).replace(rr, '')    } for root, d_names,f_names in os.walk(path) for i, fn in enumerate(sorted(f_names))]
+
+        
+        l = flat(ttt, ll)
+        
         d = { "status" : "ok", "list" : l, "dict" : tree(path)  }
 
+        
         #EKOX(dd)
         
         sd = json.dumps(d)

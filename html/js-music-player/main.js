@@ -20,84 +20,8 @@ let updateTimer;
 let curr_track = document.createElement('audio');
 
 var track_dir = {}
-let datad = [
-        { "id": "0",      "text":     "node-0",
-          "children": [
-              { "id": "0-0X", "text": "node-0-0X" },              
-              { "id": "0-0XX", "text": "node-0-0XX"},              
-              { "id": "0-0", "text": "node-0-0",
-                "children": [
-                    { "id": "0-0-0", "text": "node-0-0-0" },
-                    { "id": "0-0-1", "text": "node-0-0-1" }, { "id": "0-0-2", "text": "node-0-0-2" }] },
-              { "id": "0-1", "text": "node-0-1",
-                "children": [
-                    { "id": "0-1-0", "text": "node-0-1-0" },
-                    { "id": "0-1-1", "text": "node-0-1-1" },
-                    { "id": "0-1-2", "text": "node-0-1-2" }] },
-              { "id": "0-2", "text": "node-0-2",
-                "children": [
-                    { "id": "0-2-0", "text": "node-0-2-0" }, { "id": "0-2-1", "text": "node-0-2-1" }, { "id": "0-2-2", "text": "node-0-2-2" }] }]
-        },
-        { "id": "1", "text": "node-1",
-          "children": [
-              { "id": "1-0", "text": "node-1-0",
-                "children": [
-                    { "id": "1-0-0", "text": "node-1-0-0" },
-                    { "id": "1-0-1", "text": "node-1-0-1" },
-                    { "id": "1-0-2", "text": "node-1-0-2" }] },
-              { "id": "1-1", "text": "node-1-1",
-                "children": [
-                    { "id": "1-1-0", "text": "node-1-1-0" },
-                    { "id": "1-1-1", "text": "node-1-1-1" },
-                    { "id": "1-1-2", "text": "node-1-1-2" }] },
-              { "id": "1-2", "text": "node-1-2",
-                "children": [{ "id": "1-2-0", "text": "node-1-2-0" }, { "id": "1-2-1", "text": "node-1-2-1" }, { "id": "1-2-2", "text": "node-1-2-2" }]
-              }]
-        },
-        { "id": "2", "text": "node-2",
-          "children": [
-              { "id": "2-0", "text": "node-2-0",
-                "children": [
-                    { "id": "2-0-0", "text": "node-2-0-0" },
-                    { "id": "2-0-1", "text": "node-2-0-1" },
-                    { "id": "2-0-2", "text": "node-2-0-2" }]
-              },
-              { "id": "2-1", "text": "node-2-1",
-                "children": [
-                    { "id": "2-1-0", "text": "node-2-1-0" },
-                    { "id": "2-1-1", "text": "node-2-1-1" },
-                    { "id": "2-1-2", "text": "node-2-1-2" }]
-              },
-              { "id": "2-2", "text": "node-2-2",
-                "children": [
-                    { "id": "2-2-0", "text": "node-2-2-0" },
-                    { "id": "2-2-1", "text": "node-2-2-1" },
-                    { "id": "2-2-2", "text": "node-2-2-2" }] }] }
-    ]
-// Define the tracks that have to be played
-var track_list = [
-  {
-    name: "Night Owl",
-    artist: "Broke For Free",
-    image: "https://images.pexels.com/photos/2264753/pexels-photo-2264753.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250&w=250",
-    path: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/WFMU/Broke_For_Free/Directionless_EP/Broke_For_Free_-_01_-_Night_Owl.mp3"
-  },
-  {
-    name: "Enthusiast",
-    artist: "Tours",
-    image: "https://images.pexels.com/photos/3100835/pexels-photo-3100835.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250&w=250",
-    path: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3"
-  },
-  {
-    name: "Shipping Lanes",
-    artist: "Chad Crouch",
-    image: "https://images.pexels.com/photos/1717969/pexels-photo-1717969.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250&w=250",
-    path: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3",
-  },
-];
 
-
-
+var dindex = {} 
 
 function random_bg_color() {
 
@@ -120,8 +44,6 @@ function loadTrack(track_index) {
     curr_track.src = track_list[track_index].path;
 
     console.log("src", curr_track.src);
-
-    
     curr_track.load();
     
     track_art.style.backgroundImage = "url(" + track_list[track_index].image + ")";
@@ -231,23 +153,32 @@ function read_list() {
         EKOX('fetched');
         response.json().then(d => {
             track_dir = d.dict;
-            console.log("flat", flat(track_dir))
             track_list = d.list;
             //track_dir = datad;
+
+            EKOX(track_dir.toString())
+            console.log('track_dir', track_dir)
+
+            for (i in track_list) {
+                dindex[track_list[i]["id"]] = i;
+            }
+
+            console.log('dindex', dindex)
+            
             loadTrack(0);
             let tree = new Tree('.container',
                                 {
-                                    data: [{ id: '-1', text: 'root', children: track_dir   }],
-                                    closeDepth: 3,
+                                    data: [{ id: '-1', text: 'root', children: track_dir }],
+                                    closeDepth: 5,
                                     loaded: function () {
-                                        this.values = ['0-0-0', '0-1-1'];
                                         console.log(this.selectedNodes);
                                         console.log(this.values);
-                                        this.disables = ['0-0-0', '0-0-1', '0-0-2']
                                     },
                                     onChange: function () {
                                         console.log(this.values);
-                                        EKOX(this)
+                                        console.log(dindex[this.values[0]])
+                                        loadTrack(dindex[this.values[0]])
+                                        playTrack()
                                     }
                                 })
             tree.collapseAll()
@@ -259,4 +190,3 @@ function read_list() {
 read_list()
 
 
-console.log(track_list);
