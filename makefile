@@ -11,6 +11,7 @@ start : server_nuc
 server_nuc : pem 
 #	ip -f inet addr show eth1 | awk '/inet / {print https://$2:8080}'
 	MDP=xxxx python -c 'import server; server.go()'
+
 run :
 	date
 	source ${HOME}/scripts/.bashrc; spy; pyenv; make server_nuc

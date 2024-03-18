@@ -99,25 +99,26 @@ class App:
             return d
 
         def tree(path):
-            EKOX(path)
-            files = [ ddd(path, f)      for f in os.listdir(path) if os.path.isfile(os.path.join(path, f)) ]
+            files = [ ddd(path, f)      for f in sorted(os.listdir(path)) if os.path.isfile(os.path.join(path, f)) ]
             dirs =  [ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
-            EKOX((path, len(files), len(dirs)))
             
             return files + dirs
         
         r = "http://176.161.19.7:9000/Audio/"
         rr = "/var/www/html/"
 
+        dindex = {}
 
         def flat(t, r) :
             for e in t :
                 ee = e.copy()
+                ee["artist"] = os.path.basename(e["id"])
+                ee["image"] = ""                
                 e["no"] = str(len(r))
                 ee["name"] = e["id"].replace("/var/www/html", "")
-                ee["artist"] = os.path.basename(e["id"])
-                ee["image"] = ""
                 ee["path"] = e["id"].replace("/var/www/html", "")
+                dindex[e["id"]] = str(len(r))
+                    
                 if "children" in ee :
                     flat(ee["children"], r)
                     del ee["children"]
@@ -128,12 +129,8 @@ class App:
         
 
         path = os.path.join(rr, "Audio")        
-        path = os.path.join(rr, "Audio/meditation")        
+        #path = os.path.join(rr, "Audio/meditation")        
         ttt = tree(path)
-        ll = []
-        EKOX(flat(ttt, ll))
-        EKOX(ttt)
-        
         EKO()
         dd = { "id" : "0", "text" : "root", "node" : "", "children" : tree(path)}
         EKO()
@@ -143,16 +140,16 @@ class App:
                 "artist" : "%s_%s" % (os.path.basename(root) , i),
                 "image" : "",
                 "path" :  os.path.join(root, fn).replace(rr, '')    } for root, d_names,f_names in os.walk(path) for i, fn in enumerate(sorted(f_names))]
-
-        
+        ll = []        
         l = flat(ttt, ll)
-        
-        d = { "status" : "ok", "list" : l, "dict" : tree(path)  }
-
-        
+        d = { "status" : "ok", "list" : l, "dict" : tree(path), "index" : dindex  }
         #EKOX(dd)
         
         sd = json.dumps(d)
+
+        with open("/tmp/tree.json", "w") as fd :
+            fd.write(json.dumps(d, sort_keys=True, indent=4))
+        
         return sd
 
     

@@ -12,7 +12,7 @@ let volume_slider = document.querySelector(".volume_slider");
 let curr_time = document.querySelector(".current-time");
 let total_duration = document.querySelector(".total-duration");
 
-let track_index = 0;
+let the_track_index = 0;
 let isPlaying = false;
 let updateTimer;
 
@@ -20,7 +20,7 @@ let updateTimer;
 let curr_track = document.createElement('audio');
 
 var track_dir = {}
-
+var timer = -1;
 var dindex = {} 
 
 function random_bg_color() {
@@ -37,30 +37,34 @@ function random_bg_color() {
   document.body.style.background = bgColor;
 }
 
-function loadTrack(track_index) {
+function loadTrack(ti) {
     clearInterval(updateTimer);
     resetValues();
-    console.log('track_list', track_list, track_index);
-    curr_track.src = track_list[track_index].path;
-
+    console.log('track_list')
+    console.log(ti);
+    curr_track.src = track_list[ti].path;
+    the_track_index = ti;
     console.log("src", curr_track.src);
     curr_track.load();
     
-    track_art.style.backgroundImage = "url(" + track_list[track_index].image + ")";
-    track_name.textContent = track_list[track_index].name;
-    track_artist.textContent = track_list[track_index].artist;
-    now_playing.textContent = "PLAYING " + (track_index + 1) + " OF " + track_list.length;
+    track_art.style.backgroundImage = "url(" + track_list[ti].image + ")";
+    track_name.textContent = track_list[ti].name;
+    track_artist.textContent = track_list[ti].artist;
+    now_playing.textContent = "PLAYING " + (ti + 1) + " OF " + track_list.length;
     
     updateTimer = setInterval(seekUpdate, 1000);
     curr_track.addEventListener("ended", nextTrack);
-    random_bg_color();
+    //random_bg_color();
 
     function stop() {
         EKOX("pause")
         pauseTrack();
     }
-    
-    setTimeout(stop, 10000)
+
+    if (timer != -1) {
+        clearTimeout(timer);
+    }
+    timer = setTimeout(stop, 1000 * 60 * 30)
     
 }
 
@@ -90,19 +94,23 @@ function pauseTrack() {
 }
 
 function nextTrack() {
-  if (track_index < track_list.length - 1)
-    track_index += 1;
-  else track_index = 0;
-  loadTrack(track_index);
-  playTrack();
+    console.log(the_track_index)
+    if (the_track_index < track_list.length - 1)
+        the_track_index += 1;
+    else
+        the_track_index = 0;
+    loadTrack(the_track_index);
+    playTrack();
 }
 
 function prevTrack() {
-  if (track_index > 0)
-    track_index -= 1;
-  else track_index = track_list.length;
-  loadTrack(track_index);
-  playTrack();
+    if (the_track_index > 0) {
+        the_track_index -= 1;
+    } else {
+        the_track_index = track_list.length;
+    }
+    loadTrack(the_track_index);
+    playTrack();
 }
 
 function seekTo() {
@@ -162,14 +170,15 @@ function read_list() {
         response.json().then(d => {
             track_dir = d.dict;
             track_list = d.list;
+            dindex = d.index;
             //track_dir = datad;
 
-            EKOX(track_dir.toString())
-            console.log('track_dir', track_dir)
+            //EKOX(track_dir.toString())
+            //console.log('track_dir', track_dir)
 
-            for (i in track_list) {
-                dindex[track_list[i]["id"]] = i;
-            }
+            //for (i in track_list) {
+            //    dindex[track_list[i]["id"]] = i;
+            //}
 
             console.log('dindex', dindex)
             
@@ -183,10 +192,21 @@ function read_list() {
                                         console.log(this.values);
                                     },
                                     onChange: function () {
-                                        console.log(this.values);
-                                        console.log(dindex[this.values[0]])
-                                        loadTrack(dindex[this.values[0]])
-                                        playTrack()
+                                        //console.log(this);
+                                        //console.log(this.values);
+                                        //console.log(this.values);
+                                        vv = this.values.at(-1)
+                                        if (vv != undefined) {
+                                            console.log(vv)
+                                            console.log(dindex[vv])
+                                            idx = Number(dindex[vv])
+                                            console.log(idx)
+                                            if (idx != undefined) {
+                                                loadTrack(idx)
+                                                playTrack()
+                                            }
+                                            this.values = [ idx ]
+                                        }
                                     }
                                 })
             tree.collapseAll()
