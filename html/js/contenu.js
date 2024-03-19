@@ -11,6 +11,7 @@
 //EKOX(isMobile)
 
 
+/*
 function arbre() {
     EKOX("")
     // prettier-ignore
@@ -34,7 +35,7 @@ function arbre() {
 }
 
 arbre();
-
+*/
 
 
 
@@ -175,11 +176,11 @@ console.log('init');
 
 
 
-let activer_alarm_button = document.querySelector("#alarm-on");
-activer_alarm_button.addEventListener('click', activer_alarmf)
+//let activer_alarm_button = document.querySelector("#alarm-on");
+//activer_alarm_button.addEventListener('click', activer_alarmf)
 
-let desactiver_alarm_button = document.querySelector("#alarm-off");
-desactiver_alarm_button.addEventListener('click', desactiver_alarmf)
+//let desactiver_alarm_button = document.querySelector("#alarm-off");
+//desactiver_alarm_button.addEventListener('click', desactiver_alarmf)
 
 async function activer_alarmf() {
     alarmf(true, activer_alarm_button);
