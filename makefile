@@ -6,7 +6,11 @@ export HOST=$(shell hostname)
 SHELL=bash
 export GITINFO=$(shell git log --pretty=format:"%h - %an, %ar : %s" -1)
 
-start : server_nuc
+start1 : server_nuc
+start : bbox
+
+bbox :
+	python bbox.py
 
 server_nuc : pem 
 #	ip -f inet addr show eth1 | awk '/inet / {print https://$2:8080}'

@@ -221,11 +221,14 @@ class App:
     def garage(self):
         """ main 
         """
-        EKOT("REQ main")
-        url = os.environ["GARAGE_URL"]
-        EKOX(url)
-        with urllib.request.urlopen(url) as response:
-            html = response.read()
+        try :
+            url = os.environ["GARAGE_URL"]
+            with urllib.request.urlopen(url) as response:  html = response.read()
+        except :
+            EKOT("bad url")
+        with open(os.path.join(rootDir, "garage.html"), "r") as file :
+            data = file.read()
+            return data
         return html
         
 config2 = {
