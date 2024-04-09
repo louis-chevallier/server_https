@@ -34,6 +34,8 @@ import pyezviz
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
 
+gitdir = os.path.join(fileDir, '..')
+
 rootDir = os.path.join(localDir, "html")
 EKOX(rootDir)
 
@@ -43,25 +45,31 @@ if "PORT" in os.environ :
 
 MDP = os.environ["MDP"]
 
-config = {
-  '/' : {
-      'tools.staticdir.on': True,
-      'tools.staticdir.dir': rootDir,
-#      'tools.staticdir.dir': '/mnt/hd2/users/louis/dev/git/three.js/examples/test',
+config_running = {
+    '/' : {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': os.path.join(fileDir, '..', 'running'),
+    }
+}
 
+config = {
+    '/' : {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': rootDir,
+        
     },
-  'global' : {
-      'server.ssl_module' : 'builtin',
-      'server.ssl_certificate' : "cert.pem",
-      'server.ssl_private_key' : "privkey.pem",
-      
-      'server.socket_host' : '0.0.0.0', #192.168.1.5', #'127.0.0.1',
-      'server.socket_port' : port,
-      'server.thread_pool' : 8,
-      'log.screen': False,
-      'log.error_file': './error.log',
-      'log.access_file': './access.log'
-  },
+    'global' : {
+        'server.ssl_module' : 'builtin',
+        'server.ssl_certificate' : "cert.pem",
+        'server.ssl_private_key' : "privkey.pem",
+        
+        'server.socket_host' : '0.0.0.0', #192.168.1.5', #'127.0.0.1',
+        'server.socket_port' : port,
+        'server.thread_pool' : 8,
+        'log.screen': False,
+        'log.error_file': './error.log',
+        'log.access_file': './access.log'
+    },
 }
 
 class App:
@@ -230,7 +238,28 @@ class App:
             data = file.read()
             return data
         return html
+
+
+class App1(App) :
+    def __init__(self) :
+        EKOT("app init")
+        self.running_data = {}
         
+    
+    @cherrypy.expose
+    def save(self, runner=None, data=None) :
+        EKOX(runner)
+        data = json.loads(data)
+        self.running_data[runner] = data
+        return "OK"
+
+    @cherrypy.expose
+    def load(self, runner=None) :
+        EKOX(runner)
+        sd = json.dumps(self.running_data[runner])
+        return sd
+
+    
 config2 = {
     "dry" : (False, " true : will not run the reconstructor"),
     "gitinfo" : "info"
@@ -252,5 +281,8 @@ def go() :
     EKOX(hostname)
     EKOX(ip)
     EKOX("https://%s:%d" % ( ip, port))
+
+    cherrypy.tree.mount(App1(), '/running', config_running)
+    
     cherrypy.quickstart(app, '/', config)
     EKOT("end server", n=LOG)
