@@ -239,18 +239,27 @@ class App:
             return data
         return html
 
+root = "/mnt/NUC/data"
 
 class App1(App) :
     def __init__(self) :
         EKOT("app init")
         self.running_data = {}
+        try :
+            with open(os.path.join(root, "running_data.pickle"), "rb") as fd :
+                self.running_data = pickle.load(fd)
+            EKOX(self.running_data.keys())
+        except :
+            pass
         
-    
     @cherrypy.expose
     def save(self, runner=None, data=None) :
         EKOX(runner)
         data = json.loads(data)
-        self.running_data[runner] = data
+        self.running_data[runner] = data 
+        with open(os.path.join(root, "running_data.pickle"), "wb") as fd :
+            pickle.dump(self.running_data, fd, protocol=pickle.HIGHEST_PROTOCOL)
+       
         return "OK"
 
     @cherrypy.expose
