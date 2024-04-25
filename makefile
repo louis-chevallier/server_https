@@ -7,19 +7,22 @@ SHELL=bash
 export GITINFO=$(shell git log --pretty=format:"%h - %an, %ar : %s" -1)
 
 start1 : server_nuc
-start : bbox
+start : run 
 
 bbox :
 	python bbox.py
 
 server_nuc : pem 
 #	ip -f inet addr show eth1 | awk '/inet / {print https://$2:8080}'
-	MDP=xxxx python -c 'import server; server.go()'
+	python -c 'import server; server.go()'
 
 run :
 	date
 	source ${HOME}/scripts/.bashrc; spy; pyenv; make server_nuc
 
+dopem :
+	rm *.pem
+	make pem
 
 pem : privkey.pem  privkey.pem
 

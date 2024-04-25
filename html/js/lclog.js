@@ -37,7 +37,7 @@ function EKOX(...txt) {
         const s = LOGS(2, ...txt);    
         console.log(s);    
         const xhr1 = new XMLHttpRequest();
-        xhr1.open("GET", "/log?data=" + s);
+        xhr1.open("GET", "/log?data=" + s, false);
         xhr1.send();
     } catch (err) {
     }
@@ -48,15 +48,20 @@ function LOGS(level=1, ...txt) {
     const error = new Error();
     const stack = error.stack.split('\n')
     //const level = 2;
+    //console.log(stack)
     const a = stack[level].split("@")
     const b = a[1].split(":")
+    //console.log(b)
     const nl = parseInt(b.slice(-2, -1));
     const url = b.slice(0, -2).join(":")
+    //console.log(url)
     const file = url;
-    if (! EKOTable.hasOwnProperty(file)) {
+    //console.log(file, txt);
+    if (true || (! EKOTable.hasOwnProperty(file))) {
         const req = new XMLHttpRequest();
         req.open("GET", url, false); // <-- completely sync and deprecated
         req.send();
+        //setTimeout(1000)
         if(req.readyState === 4 && req.status === 200) {
             //console.log("response=" + req.response);
             const t  = req.response;
@@ -66,7 +71,7 @@ function LOGS(level=1, ...txt) {
             console.log("unable to retreive " + file);
         }
     } else {
-        //console.log("already there");
+        console.log("already there");
     }
     const l = EKOTable[file];
     const vv = l[nl-1];

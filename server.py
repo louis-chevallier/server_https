@@ -3,7 +3,7 @@
 
 # https://usefulangle.com/post/352/javascript-capture-image-from-camera
 
-import os, gc, sys, glob
+import os, gc, sys, glob, re
 import os, json, base64
 import shutil
 import re
@@ -30,6 +30,12 @@ import struct
 import subprocess
 
 import pyezviz
+
+import cherrypy
+import time
+import nmap
+
+
     
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
@@ -45,6 +51,9 @@ if "PORT" in os.environ :
 
 MDP = os.environ["MDP"]
 
+tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
+
+            
 config_running = {
     '/' : {
         'tools.staticdir.on': True,
@@ -80,7 +89,38 @@ class App:
         EKOT("app init")
 
         self.audio_list()
-        
+
+        self.nmScan = nmap.PortScanner()
+        thread = threading.Thread(target=self.daemon, args=())
+        thread.daemon = True                            # Daemonize thread
+        thread.start()                                  # Start the execution
+        self.devices_connected = []
+    def daemon(self):
+        while 1 :
+            #do_periodic_stuff()
+            batcmd="nmap -sL 192.168.1.*"
+            result = subprocess.check_output(batcmd, shell=True, text=True)
+            result = result.split("\n")
+            self.devices_connected.clear()
+            for e in result :
+                for ee in tels :
+                    if ee in e :
+                        ip = re.search("\((.*)\)", e).groups()[0]
+                        try :
+                            pp = subprocess.run("ping -c 1 %s" % ip, shell=True, text=True, check=True, timeout=15, capture_output=True).stdout
+                            pp = pp.split("\n")
+                            self.devices_connected.append(ee)
+                        except subprocess.CalledProcessError as ex:
+                            # exception if ping fails ( donc device absent)
+                            #EKOX(ex) 
+                            pass
+
+            mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
+            self.alarm(mode)
+                
+            #EKOX(self.devices_connected)
+            time.sleep(60*10)
+
 
     def info(self) :
         def read(gi) :
@@ -167,6 +207,9 @@ class App:
             EKOT("main")
             data = file.read()
             data = data.replace("INFO", self.info())
+
+
+            data += "devices : " + ",".join(self.devices_connected)
             #EKOX(data)
             return data
 
@@ -198,24 +241,20 @@ class App:
         #pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode HOME_MODE
         #pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode AWAY_MODE
         username, password, region = "louis.chevallier@gmail.com", "Ezviz_35", "apiieu.ezvizlife.com"
-        EKOX(onoff)
+        #EKOX(onoff)
         result = "?"
         try :
             client = pyezviz.EzvizClient(username, password, region)
-            EKO()
             client.login()
-            EKO()
             onofft = 1 if onoff == "HOME_MODE" else 0
             client.api_set_defence_mode(onofft)
-            EKO()            
             client.close_session()
-            EKO()            
             result = "ok"
         except Exception as e :
-            EKOX(e)
+            #EKOX(e)
             result = str(e)
         r = result
-        EKOX(r)
+        #EKOX(r)
         return self.status(r)
         
     @cherrypy.expose
@@ -268,6 +307,15 @@ class App1(App) :
         sd = json.dumps(self.running_data[runner])
         return sd
 
+class App2(App) :
+    def __init__(self) :
+        EKOT("app2 init")
+            
+    @cherrypy.expose
+    def index(self):
+        return "ezviz"
+
+    
     
 config2 = {
     "dry" : (False, " true : will not run the reconstructor"),
