@@ -61,6 +61,13 @@ config_running = {
     }
 }
 
+config_ezviz = {
+    '/' : {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': os.path.join(fileDir, 'ezviz'),
+    }
+}
+
 config = {
     '/' : {
         'tools.staticdir.on': True,
@@ -95,6 +102,9 @@ class App:
         thread.daemon = True                            # Daemonize thread
         thread.start()                                  # Start the execution
         self.devices_connected = []
+
+        self.mode = "auto"
+        
     def daemon(self):
         while 1 :
             #do_periodic_stuff()
@@ -116,7 +126,9 @@ class App:
                             pass
 
             mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
-            self.alarm(mode)
+
+            if self.mode == "auto" :
+                self.alarm(mode)
                 
             #EKOX(self.devices_connected)
             time.sleep(60*10)
@@ -219,6 +231,24 @@ class App:
         return 'ok'
 
     @cherrypy.expose
+    def alarm_mode(self, mode):
+        EKOX(mode)
+        if 1==1 :
+            self.mode = mode
+            d = {
+                "on" : "AWAY_MODE",
+                "off" : "HOME_MODE"
+            }
+            try :
+                self.alarm(d[mode])
+            except :
+                pass
+            return self.status("ok")            
+        else :
+            return self.status("fail")
+
+
+    @cherrypy.expose
     def alarm_off(self, mdp):
         if mdp == MDP :
             return self.alarm("HOME_MODE")
@@ -307,13 +337,17 @@ class App1(App) :
         sd = json.dumps(self.running_data[runner])
         return sd
 
-class App2(App) :
+class AppEZviz(App) :
     def __init__(self) :
-        EKOT("app2 init")
+        EKOT("app ezviz init")
             
     @cherrypy.expose
     def index(self):
-        return "ezviz"
+        with open(os.path.join(ezvizDir, "index.html"), "r") as file :
+            EKOT("main")
+            data = file.read()
+            return data
+    
 
     
     
@@ -340,6 +374,7 @@ def go() :
     EKOX("https://%s:%d" % ( ip, port))
 
     cherrypy.tree.mount(App1(), '/running', config_running)
+    cherrypy.tree.mount(AppEZviz(), '/ezviz', config_ezviz)
     
     cherrypy.quickstart(app, '/', config)
     EKOT("end server", n=LOG)
