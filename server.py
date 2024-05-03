@@ -231,7 +231,11 @@ class App:
         return 'ok'
 
     @cherrypy.expose
-    def alarm_mode(self, mode):
+    def get_alarm_mode(self):
+        return self.mode
+        
+    @cherrypy.expose
+    def set_alarm_mode(self, mode):
         EKOX(mode)
         if 1==1 :
             self.mode = mode
@@ -243,9 +247,9 @@ class App:
                 self.alarm(d[mode])
             except :
                 pass
-            return self.status("ok")            
+            return "ok, mode=%s" % self.mode
         else :
-            return self.status("fail")
+            return "fail"
 
 
     @cherrypy.expose
