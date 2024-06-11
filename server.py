@@ -8,6 +8,7 @@ import os, json, base64
 import shutil
 import re
 from utillc import *
+import utillc
 import cherrypy
 import threading
 import queue
@@ -35,8 +36,9 @@ import cherrypy
 import time
 import nmap
 
+utillc.default_opt["with_date"] = 1
 
-    
+monip = sys.env
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
 
@@ -50,6 +52,8 @@ if "PORT" in os.environ :
     port = int(os.environ["PORT"])
 
 MDP = os.environ["MDP"]
+
+MYIP = os.environ["MYIP"]
 
 tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
 
@@ -107,6 +111,7 @@ class App:
         
     def daemon(self):
         while 1 :
+            EKO()
             #do_periodic_stuff()
             batcmd="nmap -sL 192.168.1.*"
             result = subprocess.check_output(batcmd, shell=True, text=True)
@@ -164,7 +169,7 @@ class App:
             
             return files + dirs
         
-        r = "http://176.161.19.7:9000/Audio/"
+        r = "http://%s:9000/Audio/" % myip
         rr = "/var/www/html/"
 
         dindex = {}
@@ -282,6 +287,7 @@ class App:
             client.login()
             onofft = 1 if onoff == "HOME_MODE" else 0
             client.api_set_defence_mode(onofft)
+            #client.api_set_camera_defence(onofft)
             client.close_session()
             result = "ok"
         except Exception as e :
