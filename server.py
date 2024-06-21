@@ -38,7 +38,7 @@ import nmap
 
 utillc.default_opt["with_date"] = 1
 
-monip = sys.env
+
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
 
@@ -46,12 +46,15 @@ gitdir = os.path.join(fileDir, '..')
 
 rootDir = os.path.join(localDir, "html")
 EKOX(rootDir)
-
+ezvizDir = os.path.join(localDir, "ezviz")
 port = 8092
 if "PORT" in os.environ :
     port = int(os.environ["PORT"])
 
 MDP = os.environ["MDP"]
+
+
+#EKOX(os.environ)
 
 MYIP = os.environ["MYIP"]
 
@@ -108,16 +111,18 @@ class App:
         self.devices_connected = []
 
         self.mode = "auto"
+        EKOT("app inited")
         
     def daemon(self):
         while 1 :
-            EKO()
+            EKOT("checking tels")
             #do_periodic_stuff()
             batcmd="nmap -sL 192.168.1.*"
             result = subprocess.check_output(batcmd, shell=True, text=True)
             result = result.split("\n")
             self.devices_connected.clear()
             for e in result :
+                #EKO()
                 for ee in tels :
                     if ee in e :
                         ip = re.search("\((.*)\)", e).groups()[0]
@@ -129,15 +134,15 @@ class App:
                             # exception if ping fails ( donc device absent)
                             #EKOX(ex) 
                             pass
-
             mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
+            EKOX(mode)
 
             if self.mode == "auto" :
                 self.alarm(mode)
                 
             #EKOX(self.devices_connected)
             time.sleep(60*10)
-
+            EKO()
 
     def info(self) :
         def read(gi) :
@@ -169,7 +174,7 @@ class App:
             
             return files + dirs
         
-        r = "http://%s:9000/Audio/" % myip
+        r = "http://%s:9000/Audio/" % MYIP
         rr = "/var/www/html/"
 
         dindex = {}
@@ -224,6 +229,7 @@ class App:
             EKOT("main")
             data = file.read()
             data = data.replace("INFO", self.info())
+            data = data.replace("MYIP", MYIP)
 
 
             data += "devices : " + ",".join(self.devices_connected)
@@ -237,6 +243,7 @@ class App:
 
     @cherrypy.expose
     def get_alarm_mode(self):
+        EKO()
         return self.mode
         
     @cherrypy.expose
@@ -330,6 +337,12 @@ class App1(App) :
             EKOX(self.running_data.keys())
         except :
             pass
+
+    @cherrypy.expose
+    def test(self):
+        EKOT(" ==================== TEST =====================")
+        return 'ok'
+        
         
     @cherrypy.expose
     def save(self, runner=None, data=None) :
@@ -350,15 +363,21 @@ class App1(App) :
 class AppEZviz(App) :
     def __init__(self) :
         EKOT("app ezviz init")
+
+    @cherrypy.expose
+    def test(self):
+        EKOT(" ==================== TEST =====================")
+        return 'ok'
+        
             
     @cherrypy.expose
     def index(self):
+        EKO()
         with open(os.path.join(ezvizDir, "index.html"), "r") as file :
             EKOT("main")
             data = file.read()
+            EKOX(data)
             return data
-    
-
     
     
 config2 = {
@@ -381,10 +400,23 @@ def go() :
     ip = list(map(str, str(result.strip()).split()))[0]
     EKOX(hostname)
     EKOX(ip)
+    EKOX(MYIP)
     EKOX("https://%s:%d" % ( ip, port))
 
-    cherrypy.tree.mount(App1(), '/running', config_running)
-    cherrypy.tree.mount(AppEZviz(), '/ezviz', config_ezviz)
+    app1, appezviz = App1(), AppEZviz()
+    cherrypy.tree.mount(app1, '/running', config_running)
+    cherrypy.tree.mount(appezviz, '/ezviz', config_ezviz)
+    #cherrypy.tree.mount(app, '/', config)
+
+    cherrypy.config.update({
+        'server.thread_pool': 100
+    })
+
+    cherrypy.tree.mount(app1, '/running', config_running)    
     
-    cherrypy.quickstart(app, '/', config)
+    EKOT("quickstart ..")
+    #cherrypy.engine.start()
+    EKO()
+    #cherrypy.engine.block()
+    cherrypy.quickstart(app, '/', config)    
     EKOT("end server", n=LOG)
