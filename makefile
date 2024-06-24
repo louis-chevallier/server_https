@@ -5,7 +5,7 @@ export DATE:=$(shell date +%Y-%m-%d_%Hh%Mm%Ss)
 export HOST=$(shell hostname)
 SHELL=bash
 export GITINFO=$(shell git log --pretty=format:"%h - %an, %ar : %s" -1)
-
+WOD="$(shell fortune -s)"
 
 start1 : server_nuc
 
@@ -27,6 +27,8 @@ run :
 
 
 deploy :
+	git commit -a -m $(WOD)
+	git push
 	cd $(DEPLOY_DIR); rm -fr server_https; git clone  https://github.com/louis-chevallier/server_https.git; cd server_https; make dopem
 
 run1 :
