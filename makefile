@@ -8,7 +8,8 @@ export GITINFO=$(shell git log --pretty=format:"%h - %an, %ar : %s" -1)
 
 
 start1 : server_nuc
-start : run 
+
+start : run1
 
 bbox :
 	python bbox.py
@@ -22,8 +23,18 @@ run :
 	date
 	source ${HOME}/scripts/.bashrc; spy; pyenv; make server_nuc
 
+
+DEPLOY_DIR = /deploy
+
+deploy :
+	cd $(DEPLOY_DIR); rm -fr server_https; git clone  https://github.com/louis-chevallier/server_https.git; cd server_https; make dopem
+
+run1 :
+	date
+	source ${HOME}/scripts/.bashrc; spy; pyenv; export MDP=xxx ; make server_nuc
+
 dopem :
-	rm *.pem
+	-rm *.pem
 	make pem
 
 pem : privkey.pem  privkey.pem

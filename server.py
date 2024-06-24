@@ -376,7 +376,9 @@ class AppEZviz(App) :
         with open(os.path.join(ezvizDir, "index.html"), "r") as file :
             EKOT("main")
             data = file.read()
-            EKOX(data)
+            data = data.replace("INFO", self.info())
+            data = data.replace("MYIP", MYIP)
+            EKOX(data)            
             return data
     
     
