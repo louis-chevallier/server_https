@@ -1,6 +1,6 @@
 
 
-
+DEPLOY_DIR = /deploy
 export DATE:=$(shell date +%Y-%m-%d_%Hh%Mm%Ss)
 export HOST=$(shell hostname)
 SHELL=bash
@@ -24,7 +24,7 @@ run :
 	source ${HOME}/scripts/.bashrc; spy; pyenv; make server_nuc
 
 
-DEPLOY_DIR = /deploy
+
 
 deploy :
 	cd $(DEPLOY_DIR); rm -fr server_https; git clone  https://github.com/louis-chevallier/server_https.git; cd server_https; make dopem
