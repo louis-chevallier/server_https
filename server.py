@@ -17,6 +17,7 @@ import time
 import time as _time
 from time import gmtime, strftime
 from datetime import timedelta
+import datetime 
 import PIL
 from PIL import Image
 import os
@@ -53,6 +54,8 @@ if "PORT" in os.environ :
     port = int(os.environ["PORT"])
 
 MDP = os.environ["MDP"]
+
+garage_fn = "/deploy/data/garage.pickle"
 
 
 #EKOX(os.environ)
@@ -316,14 +319,24 @@ class App:
     def garage(self):
         """ main 
         """
+        html = "bad url"
         try :
             url = os.environ["GARAGE_URL"]
+            EKOX(url)
             with urllib.request.urlopen(url) as response:  html = response.read()
-        except :
-            EKOT("bad url")
+            with open(garage_fn, 'ab+') as fp:
+                EKO()
+                pickle.dump({ "date" : datetime.datetime.now()}, fp)
+            EKO()
+        except Exception as err:
+            html = "bad url"            
+            EKOT(err)
+            
+        """
         with open(os.path.join(rootDir, "garage.html"), "r") as file :
             data = file.read()
             return data
+        """
         return html
 
 root = "/mnt/NUC/data"

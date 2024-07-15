@@ -5,7 +5,10 @@ export DATE:=$(shell date +%Y-%m-%d_%Hh%Mm%Ss)
 export HOST=$(shell hostname)
 SHELL=bash
 export GITINFO=$(shell git log --pretty=format:"%h - %an, %ar : %s" -1)
-WOD="$(shell fortune -s)"
+#WOD="$(shell fortune -s)"
+WOD='$(shell fortune -s | sed -e 's/["]//g' | sed -e "s/[']//g")'
+xxx :
+	echo $(WOD)
 
 start1 : server_nuc
 
