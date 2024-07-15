@@ -29,9 +29,9 @@ run :
 	source ${HOME}/scripts/.bashrc; spy; pyenv; make server_nuc
 
 deploy :
-	git commit -a -m $(WOD)
-	git push
-	cd $(DEPLOY_DIR); rm -fr server_https; git clone  https://github.com/louis-chevallier/server_https.git; cd server_https; make dopem
+	-git commit -a -m $(WOD)
+	-git push
+	-cd $(DEPLOY_DIR); rm -fr server_https; git clone  https://github.com/louis-chevallier/server_https.git; cd server_https; make dopem
 
 run1 :
 	date
