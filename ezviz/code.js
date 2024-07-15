@@ -3,10 +3,10 @@ const force_on  = document.getElementById('force_on');
 const force_off  = document.getElementById('force_off');
 const auto  = document.getElementById('auto');
 
-console.log("code");
+console.log("code 1");
 
 function refresh() {
-    console.log("code");    
+    console.log("code 2");    
     const u = location.protocol + "//" + location.host + "/get_alarm_mode";
     console.log(u)
     const xhr1 = new XMLHttpRequest();

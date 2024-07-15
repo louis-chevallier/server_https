@@ -88,6 +88,6 @@ function LOGS(level=1, ...txt) {
 }
 
 
-
+EKOX('lclog loaded')
 
 
