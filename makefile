@@ -14,6 +14,18 @@ start1 : server_nuc
 
 start : run2
 
+launch :
+	make launch_server &
+	make launch_chaudiere &
+
+launch_chaudiere :
+	(export PORT=8093 && cd /deploy/EPortier/robot_chaudiere/frontend/ &&  export MINEKOLEVEL=0 && make run >> /tmp/traceSensor.trc 2>&1)
+
+launch_server :
+	echo $(MDP)
+	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
+
+
 bbox :
 	python bbox.py
 
