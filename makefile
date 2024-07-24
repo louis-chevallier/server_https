@@ -66,7 +66,7 @@ pem : privkey.pem  privkey.pem
 %.pem :
 # https://docs.cherrypy.dev/en/latest/deploy.html
 	openssl genrsa -out privkey.pem 2048
-	openssl req -new -x509 -days 365 -key privkey.pem -out cert.pem
+	openssl req -new -x509 -days 365 -key privkey.pem -out cert.pem -subj "/C=FR/ST=LaMeziere/L=LaMeziere/O=Global Security/OU=IT Department/CN=example.com"
 
 ccc :
 	echo aaa
