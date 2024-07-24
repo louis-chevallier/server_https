@@ -111,13 +111,15 @@
   
 
   function encrypt(ev) {
-      const keytxt  = key.innerHTML;
-      const secret = text_in.innerHTML;
+      const keytxt  = key.value; //innerHTML;
+      const secret = text_in.value; //innerHTML;
       console.log(keytxt);
-      console.log(secretMessage);
+      console.log(secret);
       const encrypted = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
                                              { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
       text_out.innerHTML = encrypted;
+
+      /*
       const copyText = encrypted;
       copyText.select();
       copyText.setSelectionRange(0, 99999); // For mobile devices
@@ -127,6 +129,7 @@
       
       // Alert the copied text
       alert("Copied the text: " + copyText.value);
+      */
   }
 
   function paste() {
