@@ -27,25 +27,6 @@
   
   <script>
 
-    //var CryptoJS = require( 'crypto-js' );
-    
-    var secretMessage = 'I hid the chips under the couch.';
-    var secretKey = 'b52b4f45b6e9337b57869d7cb718c693';
-    
-    var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(secretKey),
-                                                { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
-    
-    console.log('encryptedMessage: ' + encryptedMessage.ciphertext);
-    
-    cipherParams = CryptoJS.lib.CipherParams.create(
-        {ciphertext: CryptoJS.enc.Hex.parse(encryptedMessage.ciphertext.toString())});
-    
-    var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
-                                     { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
-    
-    console.log( 'Decrypted:' + bytes.toString(CryptoJS.enc.Utf8));
-
-    
     function allowDrop(ev) {
         ev.preventDefault();
     }
@@ -59,6 +40,9 @@
         var data = ev.dataTransfer.getData("text");
         ev.target.appendChild(document.getElementById(data));
     }
+
+     
+    
   </script>
   
     <p>
@@ -74,16 +58,23 @@
       </ul>
     </p>
 
-    <label for="key">KEY:</label>
-    <textarea id="key" name="story" rows="5" cols="33">
+    <div>
+      <label for="key">KEY:</label>
+      <textarea id="key" name="story" rows="5" cols="33">
       my secret key
-    </textarea>
-    <label for="story">Encrypted text:</label>
-    <textarea id="story" name="story" rows="5" cols="33">
-      It was a dark and stormy night...
-    </textarea>
+      </textarea>
+    </div>
+    <div>
+      <label for="story">Encrypted text:</label>
+      <textarea id="textin" name="story" rows="5" cols="33">
+        It was a dark and stormy night...
+      </textarea>
+    </div>
+
     <button onclick="encrypt()">Encrypt</button>
-    <button onclick="encrypt()">Decrypt</button> 
+    <button onclick="decrypt()">Decrypt</button>
+    <label id="textout">  result </label>
+    
 
     <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
     
@@ -91,5 +82,38 @@
 
     INFO
     
-  </body>
+</body>
+
+<script>
+  //var CryptoJS = require( 'crypto-js' );
+  
+  var secretMessage = 'I hid the chips under the couch.';
+  var secretKey = 'b52b4f45b6e9337b57869d7cb718c693';
+  
+  var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(secretKey),
+                                              { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+  
+  console.log('encryptedMessage: ' + encryptedMessage.ciphertext);
+  
+  cipherParams = CryptoJS.lib.CipherParams.create(
+      {ciphertext: CryptoJS.enc.Hex.parse(encryptedMessage.ciphertext.toString())});
+  
+  var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
+                                   { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+  
+  console.log( 'Decrypted:' + bytes.toString(CryptoJS.enc.Utf8));
+  
+  key = document.getElementById("key");
+  text_in = document.getElementById("textin");
+  text_out = document.getElementById("textout");
+  
+
+  function encrypt(ev) {
+      
+  }
+    
+    
+  
+</script>
+
 </html>
