@@ -141,8 +141,8 @@
   }
   
   function decrypt(ev) {
-      const keytxt  = key.innerHTML;
-      const secret = text_in.innerHTML;
+      const keytxt  = key.value;
+      const secret = text_in.value;
 
       cipherParams = CryptoJS.lib.CipherParams.create(
           {ciphertext: CryptoJS.enc.Hex.parse(secret)});
