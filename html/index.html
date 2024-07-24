@@ -118,7 +118,7 @@
       const encrypted = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
                                              { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
       text_out.innerHTML = encrypted;
-      console.log(encrypted);
+      console.log("encrypted", encrypted);
       /*
       const copyText = encrypted;
       copyText.select();
@@ -147,7 +147,7 @@
       var cipherParams = CryptoJS.lib.CipherParams.create(
           {ciphertext: CryptoJS.enc.Hex.parse(secret)});
       
-      const bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secret),
+      const bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(keytxt),
                                          { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
       console.log("decrypted");
       const mm = bytes.toString(CryptoJS.enc.Utf8);
