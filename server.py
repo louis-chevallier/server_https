@@ -147,8 +147,8 @@ class App:
                 self.alarm(mode)
                 
             #EKOX(self.devices_connected)
-            time.sleep(6)
-            #time.sleep(60*10)
+            #time.sleep(6)
+            time.sleep(60*1)
             EKO()
 
     def info(self) :
