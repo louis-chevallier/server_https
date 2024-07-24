@@ -109,9 +109,10 @@
   
 
   function encrypt(ev) {
-      keytxt  = key.value;
-      secretMessage = text_in.value;
-      console.log(value);
+      keytxt  = key.innerHTML;
+      secretMessage = text_in.innerHTML;
+      console.log(keytxt);
+      console.log(secretMessage);
       var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(keytxt),
                                                   { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
       text_out.innerHTML = encryptedMessage;
