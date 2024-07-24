@@ -123,6 +123,39 @@
   
 
   function encrypt(ev) {
+
+
+      var secretMessage = 'I hid the chips under the couch.';
+      var secretKey = 'b52b4f45b6e9337b57869d7cb718c693';
+      
+      var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(secretKey),
+                                                  { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+      
+      console.log('encryptedMessage: ' + encryptedMessage.ciphertext);
+      
+      cipherParams = CryptoJS.lib.CipherParams.create(
+          {ciphertext: CryptoJS.enc.Hex.parse(encryptedMessage.ciphertext.toString())});
+      
+      var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
+                                       { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+      
+      console.log( 'Decrypted:' + bytes.toString(CryptoJS.enc.Utf8));
+      
+      
+      encrypted = "2790c5f219d462f8f3549cfe4def0f0dc984968755440bc39a817ed6b9fd8fab"
+      cipherParams = CryptoJS.lib.CipherParams.create(
+          {ciphertext: CryptoJS.enc.Hex.parse(encrypted)});
+      
+      var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
+                                       { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+      
+      console.log( 'Decrypted2:' + bytes.toString(CryptoJS.enc.Utf8));
+      
+      
+      
+
+
+      
       const keytxt  = key.value; //innerHTML;
       const secret = text_in.value; //innerHTML;
       console.log(keytxt);
