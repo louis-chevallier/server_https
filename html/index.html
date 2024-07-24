@@ -133,7 +133,7 @@
       
       console.log('encryptedMessage: ' + encryptedMessage.ciphertext);
       
-      cipherParams = CryptoJS.lib.CipherParams.create(
+      const cipherParams = CryptoJS.lib.CipherParams.create(
           {ciphertext: CryptoJS.enc.Hex.parse(encryptedMessage.ciphertext.toString())});
       
       var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
@@ -142,8 +142,8 @@
       console.log( 'Decrypted:' + bytes.toString(CryptoJS.enc.Utf8));
       
       
-      encrypted = "2790c5f219d462f8f3549cfe4def0f0dc984968755440bc39a817ed6b9fd8fab"
-      cipherParams = CryptoJS.lib.CipherParams.create(
+      const encrypted = "2790c5f219d462f8f3549cfe4def0f0dc984968755440bc39a817ed6b9fd8fab"
+      const cipherParams = CryptoJS.lib.CipherParams.create(
           {ciphertext: CryptoJS.enc.Hex.parse(encrypted)});
       
       var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
@@ -160,11 +160,11 @@
       const secret = text_in.value; //innerHTML;
       console.log(keytxt);
       console.log(secret);
-      const encrypted = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
+      const encrypted2 = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
                                              { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
-      console.log("encrypted=", encrypted.ciphertext, ".");
+      console.log("encrypted=", encrypted2.ciphertext, ".");
       
-      text_out.innerHTML = encrypted.ciphertext;
+      text_out.innerHTML = encrypted2.ciphertext;
       /*
       const copyText = encrypted;
       copyText.select();
