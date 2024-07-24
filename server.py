@@ -124,23 +124,18 @@ class App:
             batcmd="nmap -sL 192.168.1.*"
             result = subprocess.check_output(batcmd, shell=True, text=True)
             result = result.split("\n")
-            EKOX(result)
             self.devices_connected.clear()
             for e in result :
                 #EKO()
                 for ee in tels :
                     if ee in e :
-                        EKON(e, ee)
                         ip = re.search("\((.*)\)", e).groups()[0]
-                        EKOX(ip)
                         try :
                             pp = subprocess.run("ping -c 1 %s" % ip, shell=True, text=True, check=True, timeout=15, capture_output=True).stdout
                             pp = pp.split("\n")
                             self.devices_connected.append(ee)
-                            EKOT("ok pour ip")
                         except subprocess.CalledProcessError as ex:
                             # exception if ping fails ( donc device absent)
-                            EKOX(ex) 
                             pass
             mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
             EKOX(mode)
