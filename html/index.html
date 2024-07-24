@@ -67,13 +67,13 @@
     <div>
       <label for="story">Text:</label>
       <textarea id="textin" name="story" rows="5" cols="33">
-        It was a dark and stormy night...
+        text
       </textarea>
     </div>
 
     <button onclick="encrypt()">Encrypt</button>
     <button onclick="decrypt()">Decrypt</button>
-    <label id="textout">  result </label>
+    <div id="textout">  resultresultresultresultresult </div>
     
 
     <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -109,8 +109,8 @@
   
 
   function encrypt(ev) {
-      keytxt  = key.innerHTML;
-      secretMessage = text_in.innerHTML;
+      const keytxt  = key.innerHTML;
+      const secret = text_in.innerHTML;
       console.log(keytxt);
       console.log(secretMessage);
       var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(keytxt),
