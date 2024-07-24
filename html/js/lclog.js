@@ -54,11 +54,12 @@ function LOGS(level=1, ...txt) {
     //console.log(b)
     const nl = parseInt(b.slice(-2, -1));
     const url = b.slice(0, -2).join(":")
-    //console.log(url)
+    console.log(url)
     const file = url;
     //console.log(file, txt);
     if (true || (! EKOTable.hasOwnProperty(file))) {
         const req = new XMLHttpRequest();
+        console.log("retreiving " + url);
         req.open("GET", url, false); // <-- completely sync and deprecated
         req.send();
         //setTimeout(1000)
