@@ -129,8 +129,8 @@
       console.log(secret);
       const encrypted = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
                                              { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
-      text_out.innerHTML = encrypted;
-      console.log("encrypted=", encrypted, ".");
+      text_out.innerHTML = encrypted.ciphertext;
+      console.log("encrypted=", encrypted.ciphertext, ".");
       /*
       const copyText = encrypted;
       copyText.select();
