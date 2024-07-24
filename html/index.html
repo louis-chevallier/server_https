@@ -69,10 +69,12 @@
       <textarea id="textin" name="story" rows="5" cols="33">
         text
       </textarea>
+      <button onclick="paste()">Paste</button>      
     </div>
 
     <button onclick="encrypt()">Encrypt</button>
     <button onclick="decrypt()">Decrypt</button>
+
     <div id="textout">  resultresultresultresultresult </div>
     
 
@@ -113,10 +115,51 @@
       const secret = text_in.innerHTML;
       console.log(keytxt);
       console.log(secretMessage);
-      var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(keytxt),
-                                                  { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
-      text_out.innerHTML = encryptedMessage;
+      const encrypted = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
+                                             { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+      text_out.innerHTML = encrypted;
+      const copyText = encrypted;
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
       
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+      
+      // Alert the copied text
+      alert("Copied the text: " + copyText.value);
+  }
+
+  function paste() {
+      navigator.clipboard.readText().then(function(clipboardText) {
+          text_in.innerHTML = clipboardText;
+      }).catch(function(err) {
+          console.log("paste failed");
+      });
+  }
+  
+  function decrypt(ev) {
+      const keytxt  = key.innerHTML;
+      const secret = text_in.innerHTML;
+
+      cipherParams = CryptoJS.lib.CipherParams.create(
+          {ciphertext: CryptoJS.enc.Hex.parse(secret)});
+      
+      const bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secret),
+                                         { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+      const mm = bytes.toString(CryptoJS.enc.Utf8);
+
+      console.log(keytxt);
+      console.log(secretMessage);
+      text_out.innerHTML = mm;
+      const copyText = mm;
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
+      
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+      
+      // Alert the copied text
+      alert("Copied the text: " + copyText.value);
   }
     
     
