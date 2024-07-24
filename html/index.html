@@ -150,7 +150,10 @@
       const bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(keytxt),
                                          { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
       console.log("decrypted");
+      console.log(bytes);      
+      
       const mm = bytes.toString(CryptoJS.enc.Utf8);
+      console.log("aaa");
 
       console.log(mm);
       console.log(keytxt);
