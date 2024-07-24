@@ -65,7 +65,7 @@
       </textarea>
     </div>
     <div>
-      <label for="story">Encrypted text:</label>
+      <label for="story">Text:</label>
       <textarea id="textin" name="story" rows="5" cols="33">
         It was a dark and stormy night...
       </textarea>
@@ -109,6 +109,12 @@
   
 
   function encrypt(ev) {
+      keytxt  = key.value;
+      secretMessage = text_in.value;
+      console.log(value);
+      var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(keytxt),
+                                                  { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+      text_out.innerHTML = encryptedMessage;
       
   }
     
