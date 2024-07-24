@@ -136,6 +136,7 @@ class App:
                             self.devices_connected.append(ee)
                         except subprocess.CalledProcessError as ex:
                             # exception if ping fails ( donc device absent)
+                            EKOX(ex);
                             pass
             mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
             EKOX(mode)

@@ -23,8 +23,8 @@ launch_chaudiere :
 
 launch_server :
 	echo $(MDP)
-	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
-#	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run)
+#	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
+	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run)
 
 
 bbox :
