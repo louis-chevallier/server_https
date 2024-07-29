@@ -244,12 +244,12 @@ bytes = CryptoJS.AES.decrypt(cipherParams1,CryptoJS.enc.Hex.parse(secretKey),
 console.log( 'Decrypted2:' + bytes.toString(CryptoJS.enc.Utf8));
 
 
-key = document.getElementById("key");
-text_in = document.getElementById("textin");
-text_out = document.getElementById("textout");
+var key = document.getElementById("key");
+var text_in = document.getElementById("textin");
+var text_out = document.getElementById("textout");
 
 
-function encrypt(ev) {
+function encrypt() {
 
 
     var secretMessage = 'I hid the chips under the couch.';
