@@ -250,8 +250,6 @@ var text_out = document.getElementById("textout");
 
 
 function encrypt() {
-
-
     var secretMessage = 'I hid the chips under the couch.';
     var secretKey = 'b52b4f45b6e9337b57869d7cb718c693';
     
