@@ -209,8 +209,141 @@ async function alarmf(alarm_on, button) {
     xhr1.send();
 }
 
+EKOX("test encrypt")
+
+function encrypt1(ev) {
+    console.log("encrypt1");
+}
+
+
+
+var secretMessage = 'I hid the chips under the couch.';
+var secretKey = 'b52b4f45b6e9337b57869d7cb718c693';
+
+var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(secretKey),
+                                            { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+
+console.log('encryptedMessage: ' + encryptedMessage.ciphertext);
+
+const cipherParams = CryptoJS.lib.CipherParams.create(
+    {ciphertext: CryptoJS.enc.Hex.parse(encryptedMessage.ciphertext.toString())});
+
+var bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(secretKey),
+                                 { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+
+console.log( 'Decrypted:' + bytes.toString(CryptoJS.enc.Utf8));
+
+
+const encrypted = "2790c5f219d462f8f3549cfe4def0f0dc984968755440bc39a817ed6b9fd8fab"
+const cipherParams1 = CryptoJS.lib.CipherParams.create(
+    {ciphertext: CryptoJS.enc.Hex.parse(encrypted)});
+
+bytes = CryptoJS.AES.decrypt(cipherParams1,CryptoJS.enc.Hex.parse(secretKey),
+                             { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+
+console.log( 'Decrypted2:' + bytes.toString(CryptoJS.enc.Utf8));
+
+
+key = document.getElementById("key");
+text_in = document.getElementById("textin");
+text_out = document.getElementById("textout");
+
+
+function encrypt(ev) {
+
+
+    var secretMessage = 'I hid the chips under the couch.';
+    var secretKey = 'b52b4f45b6e9337b57869d7cb718c693';
+    
+    var encryptedMessage = CryptoJS.AES.encrypt(secretMessage, CryptoJS.enc.Hex.parse(secretKey),
+                                                { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+    
+    EKOX(encryptedMessage.ciphertext);
+    
+    const cipherParams2 = CryptoJS.lib.CipherParams.create(
+        {ciphertext: CryptoJS.enc.Hex.parse(encryptedMessage.ciphertext.toString())});
+    
+    var bytes = CryptoJS.AES.decrypt(cipherParams2,CryptoJS.enc.Hex.parse(secretKey),
+                                     { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+    
+    EKOX(bytes.toString(CryptoJS.enc.Utf8));
+    
+    
+    const encrypted = "2790c5f219d462f8f3549cfe4def0f0dc984968755440bc39a817ed6b9fd8fab"
+    const cipherParams3 = CryptoJS.lib.CipherParams.create(
+        {ciphertext: CryptoJS.enc.Hex.parse(encrypted)});
+    
+    var bytes = CryptoJS.AES.decrypt(cipherParams3, CryptoJS.enc.Hex.parse(secretKey),
+                                     { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+    
+    EKOX(bytes.toString(CryptoJS.enc.Utf8));
+    
+    const keytxt  = key.value; //innerHTML;
+    const secret = text_in.value; //innerHTML;
+    EKOX(keytxt);
+    EKOX(secret);
+    const encrypted2 = CryptoJS.AES.encrypt(secret, CryptoJS.enc.Hex.parse(keytxt),
+                                            { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+    EKOX(encrypted2.ciphertext, ".");
+    
+    text_out.innerHTML = encrypted2.ciphertext;
+    /*
+      const copyText = encrypted;
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
+      
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+      
+      // Alert the copied text
+      alert("Copied the text: " + copyText.value);
+    */
+}
+
+function paste() {
+    navigator.clipboard.readText().then(function(clipboardText) {
+        text_in.innerHTML = clipboardText;
+    }).catch(function(err) {
+        console.log("paste failed");
+    });
+}
+
+function decrypt(ev) {
+    const keytxt  = key.value;
+    const encrypted = text_in.value;
+    EKOX(encrypted);
+    var cipherParams = CryptoJS.lib.CipherParams.create(
+        {ciphertext: CryptoJS.enc.Hex.parse(encrypted)});
+    
+    const bytes = CryptoJS.AES.decrypt(cipherParams,CryptoJS.enc.Hex.parse(keytxt),
+                                       { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.NoPadding });
+    EKOX("decrypted");
+    EKOX(bytes);      
+    
+    const mm = bytes.toString(CryptoJS.enc.Utf8);
+    EKOX("aaa");
+
+    EKOX(mm);
+    EKOX(keytxt);
+    EKOX(secretMessage);
+    text_out.innerHTML = mm;
+    const copyText = mm;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+    
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.value);
+    
+    // Alert the copied text
+    alert("Copied the text: " + copyText.value);
+}
+
+
+
 
 EKOX("starting");
+
+
 
 
 
