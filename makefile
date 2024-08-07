@@ -12,7 +12,7 @@ xxx :
 
 start1 : server_nuc
 
-start : run2
+start : run1
 
 launch :
 	make launch_server &
