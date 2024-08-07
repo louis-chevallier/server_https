@@ -64,6 +64,10 @@ garage_fn = "/deploy/data/garage.pickle"
 
 MYIP = os.environ["MYIP"]
 
+
+import gps
+
+
 tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
 
             
