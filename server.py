@@ -49,7 +49,6 @@ gitdir = os.path.join(fileDir, '..')
 rootDir = os.path.join(localDir, "html")
 EKOX(rootDir)
 
-gpsDir = os.path.join(localDir, "gps")
 
 ezvizDir = os.path.join(localDir, "ezviz")
 port = 8092
@@ -82,12 +81,6 @@ config_ezviz = {
     }
 }
 
-config_GPS = {
-    '/' : {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': os.path.join(fileDir, 'gps'),
-    }
-}
 
 config = {
     '/' : {
@@ -109,13 +102,17 @@ config = {
     },
 }
 
+
+apps = []
+
+
 class App:
     """
     the Webserver
     """
     def __init__(self) :
         EKOT("app init")
-
+        apps.append(self)
         self.audio_list()
 
         self.nmScan = nmap.PortScanner()
@@ -387,6 +384,11 @@ class App1(App) :
         sd = json.dumps(self.running_data[runner])
         return sd
 
+    def mount(self) :
+        cherrypy.tree.mount(self, '/running', config_running)
+        
+    
+
 class AppEZviz(App) :
     def __init__(self) :
         EKOT("app ezviz init")
@@ -395,7 +397,9 @@ class AppEZviz(App) :
     def test(self):
         EKOT(" ==================== TEST =====================")
         return 'ok'
-        
+
+    def mount(self) :
+        cherrypy.tree.mount(self, '/ezviz', config_ezviz)
             
     @cherrypy.expose
     def index(self):
@@ -408,26 +412,6 @@ class AppEZviz(App) :
             EKOX(data)            
             return data
 
-class AppGPS(App) :
-    def __init__(self) :
-        EKOT("app GPS init")
-
-    @cherrypy.expose
-    def test(self):
-        EKOT(" ==================== TEST =====================")
-        return 'ok'
-        
-            
-    @cherrypy.expose
-    def index(self):
-        EKO()
-        with open(os.path.join(gpsDir, "index.html"), "r") as file :
-            EKOT("main")
-            data = file.read()
-            data = data.replace("INFO", self.info())
-            data = data.replace("MYIP", MYIP)
-            EKOX(data)            
-            return data
     
     
 config2 = {
@@ -454,9 +438,12 @@ def go() :
 
     app1, appezviz = App1(), AppEZviz()
     appGPS = AppGPS()
-    cherrypy.tree.mount(app1, '/running', config_running)
-    cherrypy.tree.mount(appezviz, '/ezviz', config_ezviz)
-    cherrypy.tree.mount(appGPS, '/gps', config_GPS)
+
+
+    for app in apps :
+        app.mount()
+    
+    
     #cherrypy.tree.mount(app, '/', config)
 
     cherrypy.config.update({
