@@ -48,6 +48,9 @@ gitdir = os.path.join(fileDir, '..')
 
 rootDir = os.path.join(localDir, "html")
 EKOX(rootDir)
+
+gpsDir = os.path.join(localDir, "gps")
+
 ezvizDir = os.path.join(localDir, "ezviz")
 port = 8092
 if "PORT" in os.environ :
@@ -76,6 +79,13 @@ config_ezviz = {
     '/' : {
         'tools.staticdir.on': True,
         'tools.staticdir.dir': os.path.join(fileDir, 'ezviz'),
+    }
+}
+
+config_GPS = {
+    '/' : {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': os.path.join(fileDir, 'gps'),
     }
 }
 
@@ -397,6 +407,27 @@ class AppEZviz(App) :
             data = data.replace("MYIP", MYIP)
             EKOX(data)            
             return data
+
+class AppGPS(App) :
+    def __init__(self) :
+        EKOT("app GPS init")
+
+    @cherrypy.expose
+    def test(self):
+        EKOT(" ==================== TEST =====================")
+        return 'ok'
+        
+            
+    @cherrypy.expose
+    def index(self):
+        EKO()
+        with open(os.path.join(gpsDir, "index.html"), "r") as file :
+            EKOT("main")
+            data = file.read()
+            data = data.replace("INFO", self.info())
+            data = data.replace("MYIP", MYIP)
+            EKOX(data)            
+            return data
     
     
 config2 = {
@@ -413,7 +444,6 @@ def go() :
     hostname = socket.gethostname()
     IPAddr = socket.gethostbyname(hostname)
 
-
     batcmd="dir"
     result = subprocess.check_output("hostname -I", shell=True, text=True)
     ip = list(map(str, str(result.strip()).split()))[0]
@@ -423,8 +453,10 @@ def go() :
     EKOX("https://%s:%d" % ( ip, port))
 
     app1, appezviz = App1(), AppEZviz()
+    appGPS = AppGPS()
     cherrypy.tree.mount(app1, '/running', config_running)
     cherrypy.tree.mount(appezviz, '/ezviz', config_ezviz)
+    cherrypy.tree.mount(appGPS, '/gps', config_GPS)
     #cherrypy.tree.mount(app, '/', config)
 
     cherrypy.config.update({
