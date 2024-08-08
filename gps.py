@@ -8,6 +8,7 @@ import queue
 import nmap
 import subprocess
 import json, pickle
+from datetime import datetime
 gpsDir = os.path.join(app.localDir, "gps")
 
 config_GPS = {
@@ -30,10 +31,15 @@ class AppGPS(app.App0) :
         
             
     @cherrypy.expose
-    def position(self, latitude, longitude, accuracy ):
+    def position(self, name, latitude, longitude, accuracy ):
+        EKOX(name)
         EKON(latitude, longitude, accuracy)
-        EKOX(cherrypy.request.remote.ip)
-        self.pos[cherrypy.request.remote.ip] =  {
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        
+        self.pos[name] =  {
+            "time" : current_time,
+            "name" : name,            
             "latitude" : latitude,
             "longitude" : longitude,
             "accuracy" : accuracy}
