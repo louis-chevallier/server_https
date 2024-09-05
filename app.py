@@ -7,6 +7,11 @@ import queue
 import nmap
 import subprocess
 import json, pickle, re, time
+from urllib.parse import urlparse
+import urllib
+import urllib.request
+from datetime import timedelta
+import datetime 
 
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
@@ -23,6 +28,8 @@ MYIP = os.environ["MYIP"]
 apps = []
 
 tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
+
+garage_fn = "/deploy/data/garage.pickle"
 
 
 class App0 :
@@ -266,7 +273,9 @@ class App(App0) :
         try :
             url = os.environ["GARAGE_URL"]
             EKOX(url)
-            with urllib.request.urlopen(url) as response:  html = response.read()
+            with urllib.request.urlopen(url) as response:
+                html = response.read()
+            EKO()
             with open(garage_fn, 'ab+') as fp:
                 EKO()
                 pickle.dump({ "date" : datetime.datetime.now()}, fp)

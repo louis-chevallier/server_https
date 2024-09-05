@@ -22,7 +22,8 @@ launch_chaudiere :
 	(export PORT=8093 && cd /deploy/EPortier/robot_chaudiere/frontend/ &&  export MINEKOLEVEL=0 && make run >> /tmp/traceSensor.trc 2>&1)
 
 launch_server :
-	echo $(MDP)
+	echo mdp $(MDP)
+	echo myip $(MYIP)
 	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
 #	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run)
 

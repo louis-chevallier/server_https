@@ -50,7 +50,6 @@ if "PORT" in os.environ :
 
 MDP = os.environ["MDP"]
 
-garage_fn = "/deploy/data/garage.pickle"
 
 
 #EKOX(os.environ)
