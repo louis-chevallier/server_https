@@ -212,11 +212,6 @@ class App(App0) :
         return self.devices_connected
 
     @cherrypy.expose
-    def get_alarm_mode(self):
-        EKO()
-        return self.mode
-        
-    @cherrypy.expose
     def set_alarm_mode(self, mode):
         EKOX(mode)
         if 1==1 :
