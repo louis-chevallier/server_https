@@ -204,7 +204,7 @@ class App(App0) :
     @cherrypy.expose
     def get_alarm_mode(self):
         EKO()
-        return self.mode + ", tel =  " + ",".join(self.get_devices)
+        return self.mode + ", tel =  " + ",".join(self.get_devices())
 
     @cherrypy.expose
     def get_devices(self):
