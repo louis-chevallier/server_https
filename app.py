@@ -12,6 +12,7 @@ import urllib
 import urllib.request
 from datetime import timedelta
 import datetime 
+import pyezviz
 
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
@@ -78,12 +79,12 @@ class App(App0) :
     def daemon(self):
         EKOT("demaon")
         while 1 :
-            EKOT("checking tels")
+            #EKOT("checking tels")
             #do_periodic_stuff()
             batcmd="nmap -sL 192.168.1.*"
             result = subprocess.check_output(batcmd, shell=True, text=True)
             result = result.split("\n")
-            EKOX(result)
+            #EKOX(result)
             self.devices_connected.clear()
             for e in result :
                 #EKO()
@@ -95,21 +96,21 @@ class App(App0) :
                             pp = pp.split("\n")
                             self.devices_connected.append(ee)
                             ipok = 1;
-                            EKON(ipok, ip)
+                            #EKON(ipok, ip)
                         except subprocess.CalledProcessError as ex:
                             # exception if ping fails ( donc device absent)
                             EKOX(ex);
                             pass
             mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
-            EKOX(mode)
+            #EKOX(mode)
 
             if self.mode == "auto" :
                 self.alarm(mode)
                 
-            EKOX(self.devices_connected)
+            #EKOX(self.devices_connected)
             #time.sleep(6)
             time.sleep(60*1)
-            EKO()
+            #EKO()
 
 
 
@@ -224,7 +225,8 @@ class App(App0) :
             }
             try :
                 self.alarm(d[mode])
-            except :
+            except Exception as e:
+                EKOX(e)
                 pass
             return "ok, mode=%s" % self.mode
         else :
@@ -254,7 +256,7 @@ class App(App0) :
         #pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode HOME_MODE
         #pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode AWAY_MODE
         username, password, region = "louis.chevallier@gmail.com", "Ezviz_35", "apiieu.ezvizlife.com"
-        #EKOX(onoff)
+        EKOX(onoff)
         result = "?"
         try :
             client = pyezviz.EzvizClient(username, password, region)
@@ -263,9 +265,10 @@ class App(App0) :
             client.api_set_defence_mode(onofft)
             #client.api_set_camera_defence(onofft)
             client.close_session()
+            EKOT("ok")
             result = "ok"
         except Exception as e :
-            #EKOX(e)
+            EKOX(e)
             result = str(e)
         r = result
         #EKOX(r)

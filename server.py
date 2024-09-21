@@ -162,7 +162,7 @@ class AppEZviz(app.App0) :
             data = file.read()
             data = data.replace("INFO", self.info())
             data = data.replace("MYIP", app.MYIP)
-            EKOX(data)            
+            #EKOX(data)            
             return data
 
     
