@@ -17,6 +17,13 @@ start : run1
 launch :
 	make launch_server &
 	make launch_chaudiere &
+	make start_linky &
+
+start_linky :
+	(export PORT=8093 && cd /deploy//server_https &&  export MINEKOLEVEL=0 && make linky >> /tmp/traceLinky.trc 2>&1)
+
+linky :
+	source ${HOME}/scripts/.bashrc; spy; pyenv; python monitor_linky.py --write
 
 launch_chaudiere :
 	(export PORT=8093 && cd /deploy/EPortier/robot_chaudiere/frontend/ &&  export MINEKOLEVEL=0 && make run >> /tmp/traceSensor.trc 2>&1)
