@@ -25,7 +25,7 @@ parser.add_argument('--read', action='store_true')
 parser.add_argument('--write', action='store_true')
 args = parser.parse_args()
 if args.read :
-    with open("data.pickle", "rb") as f:
+    with open(fn, "rb") as f:
         d = pickle.load(f)
         dates = list(d["dates"].keys())
         EKOX(len(dates))
@@ -40,6 +40,7 @@ if args.read :
         n = len(v)
         EKOX(n)
         ndates = [ d0 + timedelta(seconds=s * T) for s in range(0,n)]
+        EKOX(list(map(str, ndates)))
         plt.plot(ndates, v); plt.show()
 if args.write :
     for j in range(999999999) :
