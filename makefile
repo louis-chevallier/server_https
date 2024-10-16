@@ -24,7 +24,7 @@ launch_chaudiere :
 launch_server :
 	echo mdp $(MDP)
 	echo myip $(MYIP)
-	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
+	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.115:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
 #	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run)
 
 
