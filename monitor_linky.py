@@ -14,8 +14,8 @@ T = 1 # second
 K = 3000
 S = 3600*24*7
 
-K=6
-S=31
+#K=6
+#S=31
 
 fn1, fn2 = "linky1.pickle", "linky2.pickle"
 
