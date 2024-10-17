@@ -14,18 +14,19 @@ T = 1 # second
 K = 3000
 S = 3600*24*7
 
-#K=3
-#S = 6
+K=6
+S=31
 
-fn, fn1 = "linky1.pickle", "linky2.pickle"
+fn, fn2 = "linky1.pickle", "linky2.pickle"
 
 
 parser = argparse.ArgumentParser(description='monitor linky')
 parser.add_argument('--read', action='store_true')
 parser.add_argument('--write', action='store_true')
+parser.add_argument('--file', default=fn)
 args = parser.parse_args()
 if args.read :
-    with open(fn, "rb") as f:
+    with open(args.file, "rb") as f:
         d = pickle.load(f)
         dates = list(d["dates"].keys())
         EKOX(len(dates))
@@ -33,7 +34,8 @@ if args.read :
         d0 = dates[0]
         EKOX(d0)
         fi = d["dates"][d0]
-        EKOX(fi)                
+        EKOX(fi)
+        EKOX(len(d["values"]))
         v = np.asarray(d["values"][fi:])
         v = v[:,1]
         EKOX(v)
@@ -64,9 +66,10 @@ if args.write :
                 EKON(i, now)
                 with open(fn, "wb") as f:
                     pickle.dump(d, f)
+        EKOT("moving")
         try :
-            os.remove(fn1)
+            os.remove(fn2)
         except :
             pass
-        os.replace(fn, fn1)
+        os.replace(fn, fn2)
 
