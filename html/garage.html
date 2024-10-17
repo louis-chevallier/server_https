@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>NUC Garage</title>
+    </style>
+</head>
+
+<body onload="load()" >
+  <div id="message"></div>
+  <script>
+
+    function detectMob() {
+        const toMatch = [
+            /Android/i,
+            /webOS/i,
+            /iPhone/i,
+            /iPad/i,
+            /iPod/i,
+            /BlackBerry/i,
+            /Windows Phone/i
+        ];
+        
+        return toMatch.some((toMatchItem) => {
+            return navigator.userAgent.match(toMatchItem);
+        });
+    }
+                            
+    mobile = detectMob();
+    sz = mobile ? "200px" : "233px"
+    document.getElementById("message").style.fontSize  =  sz;
+
+    async function load() {
+        timer = setTimeout(function() {
+            console.log("load")
+            document.getElementById("message").innerHTML  =  "OK";
+            timer1 = setTimeout(function() {
+                console.log("after ok, closing")
+                window.close();
+                console.log("after close")                
+            }, 1000);
+        }, 1000)
+
+    }
+  </script>
+  
+</body>
+</html>
