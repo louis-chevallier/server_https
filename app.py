@@ -112,19 +112,19 @@ class App(App0) :
             time.sleep(60*1)
             #EKO()
 
-	@cherrypy.expose
-	def heure(self, rep) :
-		now = datetime.now()
-		print(now.year, now.month, now.day, now.hour, now.minute, now.second)
-		d = { "an" : now.year,
-			  "mois" : now.month,
-			  "jour": now.day,
-			  "heure" : now.hour,
-			  "minute" : now.minute,
-			  "seconde" : now.second }
+    @cherrypy.expose
+    def heure(self, rep) :
+        now = datetime.now()
+        print(now.year, now.month, now.day, now.hour, now.minute, now.second)
+        d = { "an" : now.year,
+              "mois" : now.month,
+              "jour": now.day,
+              "heure" : now.hour,
+              "minute" : now.minute,
+              "seconde" : now.second }
         sd = json.dumps(d)
-		return sd
-	
+        return sd
+    
     def status(self, rep) :
         with open(os.path.join(rootDir, "index.html"), "r") as file :
             data = file.read()
