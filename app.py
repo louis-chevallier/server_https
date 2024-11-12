@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 import urllib
 import urllib.request
 from datetime import timedelta, datetime
-import datetime 
+
 import pyezviz
 
 fileDir = os.path.dirname(os.path.abspath(__file__))
@@ -113,7 +113,7 @@ class App(App0) :
             #EKO()
 
     @cherrypy.expose
-    def heure(self, rep) :
+    def heure(self) :
         now = datetime.now()
         print(now.year, now.month, now.day, now.hour, now.minute, now.second)
         d = { "an" : now.year,
