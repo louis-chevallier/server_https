@@ -46,16 +46,18 @@ function doplot() {
             let consos = buf.values.map(f0);
             for (i in consos) {
                 let nd = new Date(date0 + i * interval_sec*1000);
-                dates.unshift(nd);
+                dates.push(nd);
             }
             
             const trace = {
+                showlegend: true,
                 xaxis: {
                     type: 'date',
                     title: 'consos récentes'
                 },
                 yaxis: {
-                    title: 'conso en KW'
+                    title: 'Watt',                    
+                    rangemode: 'tozero'
                 },
                 x : dates,
                 y : consos,
