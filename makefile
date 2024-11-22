@@ -17,8 +17,9 @@ start : run1
 launch :
 	make launch_server &
 	make launch_chaudiere &
-	make start_linky &
+#	make start_linky &
 
+# monitor linky now in server
 start_linky :
 	(export PORT=8093 && cd /deploy//server_https &&  export MINEKOLEVEL=0 && make linky >> /tmp/traceLinky.trc 2>&1)
 

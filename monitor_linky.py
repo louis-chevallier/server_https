@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from datetime import timedelta
 import shutil, os, sys
+
 url = "http://192.168.1.115/data_linky"
+#url = "http://192.168.1.6/data_linky"
 
 T = 1 # second
 K = 3000
