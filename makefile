@@ -12,7 +12,7 @@ xxx :
 
 start1 : server_nuc
 
-start : run1
+start : run_test
 
 launch :
 	make launch_server &
@@ -58,7 +58,7 @@ deploy :
 	-git push
 	-cd $(DEPLOY_DIR); rm -fr server_https; git clone  https://github.com/louis-chevallier/server_https.git; cd server_https; make dopem
 
-run1 :
+run_test :
 	date
 	source ${HOME}/scripts/.bashrc; spy; pyenv; export MDP=xxx ; make server_nuc
 
