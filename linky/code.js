@@ -44,7 +44,7 @@ function doplot() {
                 return e[0];
             }
             let consos = buf.values.map(f0);
-            for (i in consos) {
+            for (const i in consos) {
                 let nd = new Date(date0 + i * interval_sec*1000);
                 dates.push(nd);
             }
