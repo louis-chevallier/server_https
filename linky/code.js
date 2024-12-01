@@ -23,11 +23,11 @@ function doplot() {
     xhr1.responseType = "json";
     const d = new Date();
     
-    eko("get linky data...");
+    //eko("get linky data...");
 
     let time = d.getTime();
     xhr1.onload = () => {
-	eko("data received")
+	//eko("data received")
         let dates = [];
 	if (xhr1.readyState == 4 && xhr1.status == 200) {
 	    let response = xhr1.response;
@@ -38,7 +38,7 @@ function doplot() {
             //eko(response.interval_sec);
             //date0 = buf.date;
             let interval_sec = buf.interval_sec;
-            eko(date0);
+            //eko(date0);
             function f0(e, i) {
                 //eko(e[0]);
                 return e[0];
@@ -66,9 +66,9 @@ function doplot() {
 
             
 	    Plotly.newPlot('graph', [trace]);
-	    eko("plotted");
+	    //eko("plotted");
 	}
-	eko("processed");
+	//eko("processed");
     }
     setTimeout(doplot, 1000 * 2); // 1 mn
 }
