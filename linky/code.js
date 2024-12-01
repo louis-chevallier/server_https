@@ -33,14 +33,14 @@ function doplot() {
 	    let response = xhr1.response;
 	    let buf = response;
 	    let date0 = d.getTime();
-            eko(buf);
-            eko(response);
-            eko(response.interval_sec);
+            //eko(buf);
+            //eko(response);
+            //eko(response.interval_sec);
             //date0 = buf.date;
             let interval_sec = buf.interval_sec;
             eko(date0);
             function f0(e, i) {
-                eko(e[0]);
+                //eko(e[0]);
                 return e[0];
             }
             let consos = buf.values.map(f0);
