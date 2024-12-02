@@ -58,7 +58,7 @@ import gps
 config_running = {
 	'/' : {
 		'tools.staticdir.on': True,
-		'tools.staticdir.dir': os.path.join(app.fileDir, '..', 'running'),
+		'tools.staticdir.dir': os.path.join(app.fileDir, 'running'),
 	}
 }
 
@@ -102,9 +102,9 @@ config = {
 
 root = "/mnt/NUC/data"
 
-class App1(app.App0) :
+class AppRunning(app.App0) :
 	def __init__(self) :
-		super(App1, self).__init__()
+		super(AppRunning, self).__init__()
 		EKOT("app init")
 		self.running_data = {}
 		try :
@@ -264,8 +264,8 @@ def go() :
 	EKOX(app.MYIP)
 	EKOX("https://%s:%d" % ( ip, port))
 
-	app1, appezviz = App1(), AppEZviz()
-	appLinky = App1(), AppLinky()
+	apprunning, appezviz = AppRunning(), AppEZviz()
+	appLinky = AppLinky()
 	appGPS = gps.AppGPS()
 
 
@@ -281,7 +281,7 @@ def go() :
 		'server.thread_pool': 100
 	})
 
-	cherrypy.tree.mount(app1, '/running', config_running)	 
+	cherrypy.tree.mount(apprunning, '/running', config_running)	 
 	
 	EKOT("quickstart ..")
 	#cherrypy.engine.start()
