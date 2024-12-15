@@ -200,13 +200,13 @@ class App(App0) :
 	@cherrypy.expose
 	def index(self):
 		with open(os.path.join(rootDir, "index.html"), "r") as file :
-			EKOT("main")
+			#EKOT("main")
 			data = file.read()
 			data = data.replace("INFO", self.info())
 			data = data.replace("MYIP", MYIP)
 
 
-			data += "devices : " + ",".join(self.devices_connected)
+			data += "<br> Devices : " + ",".join(self.devices_connected)
 			#EKOX(data)
 			return data
 
