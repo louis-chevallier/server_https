@@ -208,7 +208,7 @@ class AppLinky(app.App0) :
 			#EKOX( self.MAX_LEN)
 			if (len(self.d["values"]) > self.MAX_LEN) :
 				self.d["values"].pop(0)
-				self.d["date"] = self.d["date"] + timedelta(seconds=self.T)
+				self.d["date"] = self.d["date"] - timedelta(seconds=self.T)
 			time.sleep(self.T)
 
 			#EKO()

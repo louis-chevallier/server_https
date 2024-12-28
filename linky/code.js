@@ -43,9 +43,12 @@ function doplot() {
                 //eko(e[0]);
                 return e[0];
             }
-            let consos = buf.values.map(f0);
+            // consos rangées par dates croissantes
+            let consos = buf.values.map(f0).inverse();
+
+            // dates décroisantes
             for (const i in consos) {
-                let nd = new Date(date0 + i * interval_sec*1000);
+                let nd = new Date(date0 - i * interval_sec*1000);
                 dates.push(nd);
             }
             

@@ -79,7 +79,7 @@ class App(App0) :
 	def daemon(self):
 		EKOT("demaon")
 		while 1 :
-			EKOT("checking tels")
+			#EKOT("checking tels")
 			#do_periodic_stuff()
 			batcmd="nmap -sL 192.168.1.*"
 			result = subprocess.check_output(batcmd, shell=True, text=True)
@@ -286,7 +286,7 @@ class App(App0) :
 			r = result
 		else :
 			already = onoff
-			EKON(already, self.ezviz_mode)
+			#EKON(already, self.ezviz_mode)
 			result = "OK"
 		#EKOX(r)
 		return self.status(result)
