@@ -44,7 +44,7 @@ function doplot() {
                 return e[0];
             }
             // consos rangées par dates croissantes
-            let consos = buf.values.map(f0).inverse();
+            let consos = buf.values.map(f0).reverse();
 
             // dates décroisantes
             for (const i in consos) {
