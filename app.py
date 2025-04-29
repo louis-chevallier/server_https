@@ -144,11 +144,11 @@ class App(App0) :
 			return d
 
 		def tree(path):
-            try :
-			    files = [ ddd(path, f) for f in sorted(os.listdir(path)) if os.path.isfile(os.path.join(path, f)) ]
-		        dirs =	[ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
-            except :
-                files, dirs = [], []
+			try :
+				files = [ ddd(path, f) for f in sorted(os.listdir(path)) if os.path.isfile(os.path.join(path, f)) ]
+				dirs =	[ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
+			except :
+				files, dirs = [], []
 			return files + dirs
 		
 		r = "http://%s:9000/Audio/" % MYIP
