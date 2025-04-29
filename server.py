@@ -167,7 +167,7 @@ class AppEZviz(app.App0) :
 			return data
 
 class AppLinky(app.App0) :
-	url = "http://192.168.1.115/data_linky"
+	url = "http://192.168.1.55/data_linky"
 	T = 1 # second
 	K = 3000
 	S = 3600*24*7
@@ -189,6 +189,7 @@ class AppLinky(app.App0) :
 	def daemon_linky(self):
 		EKOT("demaon")
 		while 1 :
+			#EKOX(self.url)
 			# called every T seconds
 			inst,pp = 0, 0
 			#EKO()

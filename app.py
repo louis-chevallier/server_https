@@ -79,12 +79,12 @@ class App(App0) :
 	def daemon(self):
 		EKOT("demaon")
 		while 1 :
-			#EKOT("checking tels")
+			EKOT("checking tels")
 			#do_periodic_stuff()
 			batcmd="nmap -sL 192.168.1.*"
 			result = subprocess.check_output(batcmd, shell=True, text=True)
 			result = result.split("\n")
-			#EKOX(result)
+			EKOX(result)
 			self.devices_connected.clear()
 			for e in result :
 				#EKO()
@@ -102,7 +102,8 @@ class App(App0) :
 							EKOX(ex);
 							pass
 			mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
-			#EKOX(mode)
+			EKOX(mode)
+			EKOX(len(self.devices_connected))
 
 			if self.mode == "auto" :
 				self.alarm(mode)
@@ -143,9 +144,11 @@ class App(App0) :
 			return d
 
 		def tree(path):
-			files = [ ddd(path, f)		for f in sorted(os.listdir(path)) if os.path.isfile(os.path.join(path, f)) ]
-			dirs =	[ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
-			
+            try :
+			    files = [ ddd(path, f) for f in sorted(os.listdir(path)) if os.path.isfile(os.path.join(path, f)) ]
+		        dirs =	[ ddd(path, f, tree(os.path.join(path, f))) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f)) ]
+            except :
+                files, dirs = [], []
 			return files + dirs
 		
 		r = "http://%s:9000/Audio/" % MYIP
