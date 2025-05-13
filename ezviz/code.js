@@ -1,3 +1,5 @@
+console.log("code 0");
+
 const label  = document.getElementById('label');
 const force_on  = document.getElementById('force_on');
 const force_off  = document.getElementById('force_off');

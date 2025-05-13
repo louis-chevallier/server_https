@@ -21,7 +21,7 @@ launch :
 
 # monitor linky now in server
 start_linky :
-	(export PORT=8093 && cd /deploy//server_https &&  export MINEKOLEVEL=0 && make linky >> /tmp/traceLinky.trc 2>&1)
+	(export PORT=8093 && cd /deploy/server_https &&  export MINEKOLEVEL=0 && make linky >> /tmp/traceLinky.trc 2>&1)
 
 linky :
 	source ${HOME}/scripts/.bashrc; spy; pyenv; python monitor_linky.py --write
@@ -32,7 +32,7 @@ launch_chaudiere :
 launch_server :
 	echo mdp $(MDP)
 	echo myip $(MYIP)
-	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.115:80/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
+	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://194.183.210.10:8080/main$(MDP) && make run >> /tmp/traceServer.trc 2>&1)
 #	(cd /deploy/server_https ; export MINEKOLEVEL=0 && export PORT=8092 && export GARAGE_URL=http://192.168.1.95:80/main$(MDP) && make run)
 
 

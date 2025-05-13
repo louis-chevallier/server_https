@@ -41,8 +41,6 @@ import app
 
 utillc.default_opt["with_date"] = 1
 
-
-
 ezvizDir = os.path.join(app.localDir, "ezviz")
 linkyDir = os.path.join(app.localDir, "linky")
 port = 8092
@@ -142,9 +140,10 @@ class AppRunning(app.App0) :
 	
 
 class AppEZviz(app.App0) :
-	def __init__(self) :
+	def __init__(self, app0) :
 		super(AppEZviz, self).__init__()		
 		EKOT("app ezviz init")
+		self.app0 = app0
 
 	@cherrypy.expose
 	def test(self):
@@ -163,6 +162,8 @@ class AppEZviz(app.App0) :
 			data = file.read()
 			data = data.replace("INFO", self.info())
 			data = data.replace("MYIP", app.MYIP)
+			data += "<br> Devices : " + ",".join(self.app0.devices_connected)
+
 			#EKOX(data)			   
 			return data
 
@@ -187,7 +188,7 @@ class AppLinky(app.App0) :
 
 
 	def daemon_linky(self):
-		EKOT("demaon")
+		EKOT("daemon")
 		while 1 :
 			#EKOX(self.url)
 			# called every T seconds
@@ -265,7 +266,7 @@ def go() :
 	EKOX(app.MYIP)
 	EKOX("https://%s:%d" % ( ip, port))
 
-	apprunning, appezviz = AppRunning(), AppEZviz()
+	apprunning, appezviz = AppRunning(), AppEZviz(app0)
 	appLinky = AppLinky()
 	appGPS = gps.AppGPS()
 

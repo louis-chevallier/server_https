@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 import urllib
 import urllib.request
 from datetime import timedelta, datetime
-
+#from pythonping import ping
 import pyezviz
 
 fileDir = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +27,8 @@ MYIP = os.environ["MYIP"]
 
 
 apps = []
-
+#mon tel :  e0:dc:ff:ec:d6:89 	Android-3 	192.168.1.72 	CHEVALLIER_BORDEAU 	2.4GHz 
+tel_louis_ip = "192.168.1.72"
 tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
 
 garage_fn = "/deploy/data/garage.pickle"
@@ -77,30 +78,46 @@ class App(App0) :
 		self.ezviz_mode = None
 		
 	def daemon(self):
-		EKOT("demaon")
+		EKOT("daemon")
+		version = 1
 		while 1 :
-			#EKOT("checking tels")
-			#do_periodic_stuff()
-			batcmd="nmap -sL 192.168.1.*"
-			result = subprocess.check_output(batcmd, shell=True, text=True)
-			result = result.split("\n")
-			#EKOX(result)
-			self.devices_connected.clear()
-			for e in result :
-				#EKO()
-				for ee in tels :
-					if ee in e :
-						ip = re.search("\((.*)\)", e).groups()[0]
-						try :
-							pp = subprocess.run("ping -c 1 %s" % ip, shell=True, text=True, check=True, timeout=15, capture_output=True).stdout
-							pp = pp.split("\n")
-							self.devices_connected.append(ee)
-							ipok = 1;
-							#EKON(ipok, ip)
-						except subprocess.CalledProcessError as ex:
-							# exception if ping fails ( donc device absent)
-							EKOX(ex);
-							pass
+			if version == 0 :
+				EKOT("checking tels")
+				batcmd="nmap -sL 192.168.1.*"
+				result = subprocess.check_output(batcmd, shell=True, text=True)
+				result = result.split("\n")
+				#EKOX(result)
+				self.devices_connected.clear()
+				for e in result :
+					#EKO()
+					for ee in tels :
+						if ee in e :
+							ip = re.search("\((.*)\)", e).groups()[0]
+							try :
+								pp = subprocess.run("ping -c 1 %s" % ip, shell=True, text=True, check=True, timeout=15, capture_output=True).stdout
+								pp = pp.split("\n")
+								self.devices_connected.append(ee)
+								ipok = 1;
+								#EKON(ipok, ip)
+							except subprocess.CalledProcessError as ex:
+								# exception if ping fails ( donc device absent)
+								EKOX(ex);
+								pass
+			else :
+				EKO()                    
+				self.devices_connected.clear()                    
+				tels = [ ("louis", tel_louis_ip) ]
+				for ee, ip in tels :
+					try :
+						pp = subprocess.run("ping -c 1 -W 1 %s" % ip, shell=True, text=True, check=True, timeout=15, capture_output=True).stdout
+						pp = pp.split("\n")
+						self.devices_connected.append(ee)
+						ipok = 1;
+						EKON(ipok, ip)
+					except subprocess.CalledProcessError as ex:
+						# exception if ping fails ( donc device absent)
+						EKOX(ex);
+						pass
 			mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
 			#EKOX(mode)
 			#EKOX(len(self.devices_connected))
@@ -110,7 +127,7 @@ class App(App0) :
 				
 			#EKOX(self.devices_connected)
 			#time.sleep(6)
-			time.sleep(30*1)
+			time.sleep(10*1)
 			#EKO()
 
 	@cherrypy.expose
@@ -203,14 +220,14 @@ class App(App0) :
 	@cherrypy.expose
 	def index(self):
 		with open(os.path.join(rootDir, "index.html"), "r") as file :
-			#EKOT("main")
+			EKOT("main")
 			data = file.read()
 			data = data.replace("INFO", self.info())
 			data = data.replace("MYIP", MYIP)
 
 
 			data += "<br> Devices : " + ",".join(self.devices_connected)
-			#EKOX(data)
+			EKOX(data)
 			return data
 
 	@cherrypy.expose
@@ -221,7 +238,8 @@ class App(App0) :
 	@cherrypy.expose
 	def get_alarm_mode(self):
 		EKO()
-		return self.mode + ", tel =	 " + ",".join(self.get_devices())
+		return self.mode + ", tel =	 " + ",".join(self.get_devices()) + " - ezviz =" + self.ezviz_mode
+
 
 	@cherrypy.expose
 	def get_devices(self):
