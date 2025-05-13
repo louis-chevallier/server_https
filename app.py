@@ -79,12 +79,12 @@ class App(App0) :
 	def daemon(self):
 		EKOT("demaon")
 		while 1 :
-			EKOT("checking tels")
+			#EKOT("checking tels")
 			#do_periodic_stuff()
 			batcmd="nmap -sL 192.168.1.*"
 			result = subprocess.check_output(batcmd, shell=True, text=True)
 			result = result.split("\n")
-			EKOX(result)
+			#EKOX(result)
 			self.devices_connected.clear()
 			for e in result :
 				#EKO()
@@ -102,8 +102,8 @@ class App(App0) :
 							EKOX(ex);
 							pass
 			mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
-			EKOX(mode)
-			EKOX(len(self.devices_connected))
+			#EKOX(mode)
+			#EKOX(len(self.devices_connected))
 
 			if self.mode == "auto" :
 				self.alarm(mode)
