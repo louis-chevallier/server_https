@@ -12,7 +12,7 @@ import urllib
 import urllib.request
 from datetime import timedelta, datetime
 #from pythonping import ping
-import pyezviz
+import pyezvizapi
 
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
@@ -104,7 +104,7 @@ class App(App0) :
 								EKOX(ex);
 								pass
 			else :
-				EKO()                    
+				#EKO()                    
 				self.devices_connected.clear()                    
 				tels = [ ("louis", tel_louis_ip) ]
 				for ee, ip in tels :
@@ -113,7 +113,7 @@ class App(App0) :
 						pp = pp.split("\n")
 						self.devices_connected.append(ee)
 						ipok = 1;
-						EKON(ipok, ip)
+						#EKON(ipok, ip)
 					except subprocess.CalledProcessError as ex:
 						# exception if ping fails ( donc device absent)
 						EKOX(ex);
@@ -292,12 +292,14 @@ class App(App0) :
 			EKOX(onoff)
 			result = "?"
 			try :
-				client = pyezviz.EzvizClient(username, password, region)
+				client = pyezvizapi.EzvizClient(username, password, region)
 				client.login()
 				onofft = 1 if onoff == "HOME_MODE" else 0
 				client.api_set_defence_mode(onofft)
 				#client.api_set_camera_defence(onofft)
 				client.close_session()
+				now=datetime.now()
+				open("presence.txt","a").write("%s : %d\n" %(now.isoformat(), onofft))
 				EKOT("ok")
 				result = "ok"
 				self.ezviz_mode = onoff
@@ -326,7 +328,7 @@ class App(App0) :
 			EKO()
 			with open(garage_fn, 'ab+') as fp:
 				EKO()
-				pickle.dump({ "date" : datetime.datetime.now()}, fp)
+				pickle.dump({ "date" : datetime.now()}, fp)
 			EKO()
 		except Exception as err:
 			html = "bad url"			
