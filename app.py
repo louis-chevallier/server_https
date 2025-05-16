@@ -1,3 +1,12 @@
+import pytz
+from utillc import *
+import argparse, pickle, os, sys, json
+from datetime import datetime, timezone
+import os, time, glob
+import numpy as np      
+import pandas as pd
+import numpy as np, matplotlib.pyplot as plt, sys; 
+
 import os
 from utillc import *
 import utillc
@@ -13,7 +22,7 @@ import urllib.request
 from datetime import timedelta, datetime
 #from pythonping import ping
 import pyezvizapi
-
+import pytz
 fileDir = os.path.dirname(os.path.abspath(__file__))
 localDir = os.path.join(fileDir, '.')
 EKOX(fileDir)
@@ -298,8 +307,8 @@ class App(App0) :
 				client.api_set_defence_mode(onofft)
 				#client.api_set_camera_defence(onofft)
 				client.close_session()
-				now=datetime.now()
-				open("presence.txt","a").write("%s : %d\n" %(now.isoformat(), onofft))
+				now=datetime.now(pytz.timezone("Europe/Paris"))
+				open("presence.csv","a").write("%s ; %d\n" %(now.isoformat(), onofft))
 				EKOT("ok")
 				result = "ok"
 				self.ezviz_mode = onoff
@@ -340,3 +349,24 @@ class App(App0) :
 			return data
 		"""
 		return html
+
+def ppp(self) :
+	n = datetime.now(pytz.timezone("Europe/Paris"))
+	ni = n.isoformat()
+	EKON(ni)
+	EKON(datetime.fromisoformat(ni))
+
+	p  = pd.read_csv("presence.csv", delimiter=";")
+	l = [ (datetime.fromisoformat(row.iloc[0] + "+02:00"), row.iloc[1]) for index, row in p.iterrows()]
+	dates =  [ e[0] for e in l]
+	EKOX(len(dates))
+	dates2 =  [ v for e in l for v in [ e[0], e[0]] ]
+	EKOX(len(dates))
+	v  =  [ e[1] for e in l]
+	v2 = [ vv for (v0,v1) in zip(v, v[1:] + [0]) for vv in [v0, v1]] 
+	
+	EKOX(len(v))
+	EKOX(len(v2))
+
+	plt.plot(dates2, v2); plt.show()
+	EKO()
