@@ -355,6 +355,7 @@ class App(App0) :
 
 def ppp(self) :
 	n = datetime.now(pytz.timezone("Europe/Paris"))
+	
 	ni = n.isoformat()
 	EKON(ni)
 	EKON(datetime.fromisoformat(ni))
@@ -373,3 +374,4 @@ def ppp(self) :
 
 	plt.plot(dates2, v2); plt.show()
 	EKO()
+
