@@ -39,6 +39,9 @@ apps = []
 #mon tel :  e0:dc:ff:ec:d6:89 	Android-3 	192.168.1.72 	CHEVALLIER_BORDEAU 	2.4GHz 
 tel_louis_ip = "192.168.1.72"
 tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
+tels = [
+		("louis", tel_louis_ip),
+		("christine", "192.168.1.62") ]
 
 garage_fn = "/deploy/data/garage.pickle"
 
@@ -116,7 +119,7 @@ class App(App0) :
 			else :
 				#EKO()                    
 				self.devices_connected.clear()                    
-				tels = [ ("louis", tel_louis_ip) ]
+
 				for ee, ip in tels :
 					try :
 						pp = subprocess.run("ping -c 1 -W 1 %s" % ip, shell=True, text=True, check=True, timeout=15, capture_output=True).stdout
