@@ -85,7 +85,8 @@ class App(App0) :
 		self.mode = "auto"
 		EKOT("app inited")
 		self.ezviz_mode = None
-		
+		self.changed_mode = 0		
+
 	def daemon(self):
 		EKOT("daemon")
 		version = 1
@@ -246,8 +247,9 @@ class App(App0) :
 
 	@cherrypy.expose
 	def get_alarm_mode(self):
-		EKO()
-		return self.mode + ", tel =	 " + ",".join(self.get_devices()) + " - ezviz =" + self.ezviz_mode
+		rep = self.mode + ", tel =	 " + ",".join(self.get_devices()) + " - ezviz =" + self.ezviz_mode + ", changed : %d" % self.changed_mode
+		EKOX(rep)
+		return rep
 
 
 	@cherrypy.expose
@@ -298,7 +300,8 @@ class App(App0) :
 			#pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode HOME_MODE
 			#pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode AWAY_MODE
 			username, password, region = "louis.chevallier@gmail.com", "EZVIZ_35", "apiieu.ezvizlife.com"
-			EKOX(onoff)
+			#EKOX(onoff)
+			self.changed_mode += 1
 			result = "?"
 			try :
 				client = pyezvizapi.EzvizClient(username, password, region)
