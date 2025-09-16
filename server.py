@@ -260,6 +260,7 @@ def go() :
 
 	batcmd="dir"
 	result = subprocess.check_output("hostname -I", shell=True, text=True)
+	EKOX(result)
 	ip = list(map(str, str(result.strip()).split()))[0]
 	EKOX(hostname)
 	EKOX(ip)
@@ -269,7 +270,6 @@ def go() :
 	apprunning, appezviz = AppRunning(), AppEZviz(app0)
 	appLinky = AppLinky()
 	appGPS = gps.AppGPS()
-
 
 	EKOX(len(app.apps))
 	for e in app.apps :

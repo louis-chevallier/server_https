@@ -1,5 +1,9 @@
 
 
+# make deploy : copie tout dans le rep de deploiement
+# les serveurs snt lancés via cron : voir crontab -e
+
+
 DEPLOY_DIR = /deploy
 export DATE:=$(shell date +%Y-%m-%d_%Hh%Mm%Ss)
 export HOST=$(shell hostname)
