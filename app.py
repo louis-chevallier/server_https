@@ -129,7 +129,7 @@ class App(App0) :
 						#EKON(ipok, ip)
 					except subprocess.CalledProcessError as ex:
 						# exception if ping fails ( donc device absent)
-						EKOX(ex);
+						#EKOX(ex);
 						pass
 			mode = "HOME_MODE" if len(self.devices_connected) > 0 else "AWAY_MODE"
 			#EKOX(mode)
@@ -240,7 +240,7 @@ class App(App0) :
 
 
 			data += "<br> Devices : " + ",".join(self.devices_connected)
-			EKOX(data)
+			#EKOX(data)
 			return data
 
 	@cherrypy.expose
@@ -315,7 +315,7 @@ class App(App0) :
 				client.close_session()
 				now=datetime.now(pytz.timezone("Europe/Paris"))
 				open("presence.csv","a").write("%s ; %d\n" %(now.isoformat(), onofft))
-				EKOT("ok")
+				#EKOT("ok")
 				result = "ok"
 				self.ezviz_mode = onoff
 			except Exception as e :
