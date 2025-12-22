@@ -38,3 +38,21 @@ function error() {
 
 
 setTimeout(refresh, 1000)
+
+
+const ws = new WebSocket("ws://localhost:8080/ws_servo");
+ws.onmessage = function(event) {
+    const output = document.getElementById("output");
+    output.innerHTML += "<p>" + event.data + "</p>";
+};
+function sendMessage() {
+    const input = document.getElementById("messageInput");
+    ws.send(input.value);
+    input.value = "";
+}
+
+
+
+
+
+

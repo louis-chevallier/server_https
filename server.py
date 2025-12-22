@@ -30,13 +30,10 @@ import fcntl
 import struct
 
 import subprocess
-
 import pyezviz
-
 import cherrypy
 import time
 import nmap
-
 import app
 
 utillc.default_opt["with_date"] = 1
@@ -80,7 +77,15 @@ config = {
 	'/' : {
 		'tools.staticdir.on': True,
 		'tools.staticdir.dir': app.rootDir,
-		
+
+				'tools.response_headers.on': True,
+				'tools.response_headers.headers': [
+						('X-Frame-options', 'deny'),
+						('X-XSS-Protection', '1; mode=block'),
+						('X-Content-Type-Options', 'nosniff')]
+
+
+			
 	},
 	'global' : {
 			
@@ -93,7 +98,14 @@ config = {
 		'server.thread_pool' : 8,
 		'log.screen': False,
 		'log.error_file': './error.log',
-		'log.access_file': './access.log'
+			'log.access_file': './access.log',
+				'tools.response_headers.on': True,
+				'tools.response_headers.headers': [
+						('X-Frame-options', 'deny'),
+						('X-XSS-Protection', '1; mode=block'),
+						('X-Content-Type-Options', 'nosniff')]
+
+			
 	},
 }
 
