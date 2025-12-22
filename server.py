@@ -52,6 +52,7 @@ MDP = os.environ["MDP"]
 
 #EKOX(os.environ)
 import gps
+import servo
 			
 config_running = {
 	'/' : {
@@ -270,6 +271,7 @@ def go() :
 	apprunning, appezviz = AppRunning(), AppEZviz(app0)
 	appLinky = AppLinky()
 	appGPS = gps.AppGPS()
+	appServo = servo.AppServo()
 
 	EKOX(len(app.apps))
 	for e in app.apps :

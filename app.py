@@ -302,7 +302,7 @@ class App(App0) :
 			"""
 			#pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode HOME_MODE
 			#pyezviz -u louis.chevallier@gmail.com -p Ezviz_35 home_defence_mode --mode AWAY_MODE
-			username, password, region = "louis.chevallier@gmail.com", "EZVIZ_35", "apiieu.ezvizlife.com"
+			username, password, region = "louis.chevallier@gmail.com", "EZVIZezviz_35", "apiieu.ezvizlife.com"
 			#EKOX(onoff)
 			self.changed_mode += 1
 			result = "?"
