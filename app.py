@@ -234,6 +234,7 @@ class App(App0) :
 	def index(self):
 		with open(os.path.join(rootDir, "index.html"), "r") as file :
 			EKOT("main")
+			EKOX(MYIP)
 			data = file.read()
 			data = data.replace("INFO", self.info())
 			data = data.replace("MYIP", MYIP)
