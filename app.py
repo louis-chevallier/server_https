@@ -235,6 +235,9 @@ class App(App0) :
 		with open(os.path.join(rootDir, "index.html"), "r") as file :
 			EKOT("main")
 			EKOX(MYIP)
+
+			EKOX(cherrypy.request.remote.ip)
+			
 			data = file.read()
 			data = data.replace("INFO", self.info())
 			data = data.replace("MYIP", MYIP)

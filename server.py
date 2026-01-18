@@ -98,14 +98,12 @@ config = {
 		'server.thread_pool' : 8,
 		'log.screen': False,
 		'log.error_file': './error.log',
-			'log.access_file': './access.log',
-				'tools.response_headers.on': True,
-				'tools.response_headers.headers': [
-						('X-Frame-options', 'deny'),
-						('X-XSS-Protection', '1; mode=block'),
-						('X-Content-Type-Options', 'nosniff')]
-
-			
+		'log.access_file': './access.log',
+		'tools.response_headers.on': True,
+		'tools.response_headers.headers': [
+				('X-Frame-options', 'deny'),
+				('X-XSS-Protection', '1; mode=block'),
+				('X-Content-Type-Options', 'nosniff')]
 	},
 }
 
