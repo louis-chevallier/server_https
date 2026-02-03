@@ -1,7 +1,10 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const info = document.getElementById('info');
+const log = document.getElementById('log');
 var timer = 0;
+
+log.innerHTML = "version 3"
 
 function eko(x) {
     console.log(x)
@@ -33,6 +36,17 @@ function fractionToTime(fraction) {
   return `${hh}:${mm}`; // ex: "06:00" pour 0.25
 }
 
+function clean() {
+    const thr = 10 / (24*60);
+    console.log(points);
+    const a = points;
+    const a1 = points.slice(1).concat([99900]);
+    const z = a1.map((e, i) => [e, a[i]]);
+    const r = z.filter((ab,i) => ab[0]-ab[1]>thr).map(a => a[1])
+    points = r;
+    console.log(points);
+    
+}
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -108,7 +122,7 @@ function down(e) {
     const px = getPointFromEvent(e);
     draggedIndex = findClosestPoint(px);
     if (draggedIndex === -1 && e.offsetX / canvas.width < 0.05) draggedIndex = 0; // Bord gauche
-    upload();    
+    upload(true);    
     draw();
 }
 
@@ -123,21 +137,22 @@ function move(e) {
 }   
 function up() {
     draggedIndex = -1;
+    clean();
     draw();    
-    upload();
-    reload();
+    upload(true);
+    //reload();
 }
 
 
-function upload() {
+function upload(doreload) {
     const xhr1 = new XMLHttpRequest();
     xhr1.onreadystatechange = () => {
         if (xhr1.readyState === 4) {
             let ss = xhr1.responseText;
-            console.log(ss)
+            //console.log(ss)
+	    //reload()
         }
     };
-    eko(points)
     var data_s = encodeURIComponent(JSON.stringify(points));
     try {
         xhr1.open("POST", "set_data?data=" + data_s);
@@ -164,14 +179,14 @@ function reload() {
 	    points = response;
 	}
     }
-    draw()
+    //draw()
 }
 
 function doubleclick(e) {
     const px = getPointFromEvent(e);
     if (!points.includes(px)) {
         points.push(px);
-	upload();
+	upload(true);
         points.sort((a, b) => a - b);
         draw();
     }
@@ -183,6 +198,7 @@ function suppress(e) {
     const index = findClosestPoint(px);
     if (index !== -1) {
         points.splice(index, 1);
+	upload(true);	
         draw();
     }
 }
@@ -205,11 +221,11 @@ canvas.addEventListener('dblclick', doubleclick);
 canvas.addEventListener('contextmenu', suppress);
 
 function refresh() {
-    reload()
-    draw()
+    //reload()
+    //draw()
     //timer = setInterval(refresh, 1000 ); // 1 sec    
 }
-
+reload()
 timer = setInterval(refresh, 1000 ); // 1 sec
 
 draw(); // Dessin initial

@@ -293,15 +293,15 @@ class AppChaudiere(app.App0) :
 
 	@cherrypy.expose
 	def get_data(self):
-		sd = json.dumps(self.d)
-		EKOX(self.d)
+		get = sd = json.dumps(self.d)
+		EKOX(get)
 		return sd
 
 	@cherrypy.expose
 	def set_data(self, data):
-		self.d = json.loads(data)
-		EKOX(self.d)
-		return self.get_data()
+		_set = self.d = json.loads(data)
+		EKOX(_set)
+		return _set
 
 			
 	@cherrypy.expose
