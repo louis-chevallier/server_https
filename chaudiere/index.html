@@ -1,26 +1,48 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title> Programme journalier Chaudière</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title> Programme journalier Chaudière</title>
     
-    <style>
-      /* body { margin: 0; overflow: hidden; touch-action: none; }      */
-      canvas { border: 1px solid #ccc; cursor: pointer; }
-      #info { margin-top: 10px; font-family: Arial; }
-      
-      input { font-size: 100px; }                        
-      @media only screen and (max-width: 600px) {
-          body { font-size: 32px; }
-          input { font-size: 32px; }                    
-      }
-      
-    </style>
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>    
+  <style>
+    body { margin: 0; overflow: hidden; touch-action: none; }
+
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:portrait) { 
+	body {
+	    -webkit-transform: rotate(90deg);
+	    width: 100%;
+	    height: 100%;
+	    overflow: hidden;
+	    position: absolute;
+	    top: 0;
+	    left: 0; 
+	}
+    }
+    
+    
+    canvas { display: block; background: #f0f0f0; }
+    #info { position: absolute; top: 10px; left: 10px; color: #333; font-family: Arial; }
+    /*
+    canvas { border: 1px solid #ccc; cursor: pointer; }
+    #info { margin-top: 10px; font-family: Arial; }
+    
+    input { font-size: 100px; }                        
+    @media only screen and (max-width: 600px) {
+        body { font-size: 32px; }
+        input { font-size: 32px; }                    
+    }
+    */
+  </style>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>    
 </head>
 <body>
   <div id="log">...</div>
-  <canvas id="canvas" width="800" height="100"></canvas>
+  <!-- 
+       <canvas id="canvas" width="800" height="100"></canvas>
+  -->
+  <canvas id="canvas" ></canvas>
   
   <script src="http://MYIP:8092/js/lclog.js"></script>
   <script type="module" src='code.js'>    </script>

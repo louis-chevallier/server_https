@@ -48,7 +48,60 @@ function clean() {
     
 }
 
+
 function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Ligne principale
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = lineHeight;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(lineY, 0);
+    ctx.lineTo(lineY, canvas.height);
+    ctx.stroke();
+
+    // Segments colorés
+    const sortedPoints = [0, ...points.sort((a, b) => a - b), 1];
+    for (let i = 0; i < sortedPoints.length - 1; i++) {
+        const x1 = sortedPoints[i] * canvas.height;
+        const x2 = sortedPoints[i + 1] * canvas.height;
+
+	const on_off = i%2 == 1 ? 1 : 0;
+	//const color = `hsl(${i * 60}, 70%, 60%)`
+	const color = `hsl(60, 70%, ${on_off*100}%)`
+	//const color = i%2 == 1 ? "`black`" : "`white`" 
+
+	
+        ctx.fillStyle = color;
+        ctx.fillRect(lineY - lineHeight/2, x1,
+		     lineHeight, x2 - x1);
+    }
+
+    // Poignées cliquables
+    points.forEach((p, index) => {
+        const x = p * canvas.height;
+        ctx.fillStyle = draggedIndex === index ? '#ff4444' : '#444';
+        ctx.beginPath();
+        ctx.arc(lineY, x, handleRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+
+    // Labels des positions
+    points.forEach((p, index) => {
+        const x = p * canvas.height;
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(fractionToTime(p), lineY + 25, x);
+    });
+}
+
+
+function draw1() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Ligne principale
@@ -106,9 +159,15 @@ function getPointFromEvent(e) {
 
 function findClosestPoint(px) {
     let closestIndex = -1;
-    let minDist = Infinity;
+    const rect = canvas.getBoundingClientRect();
+    let minDist = 0.02 ; //canvas.height / 50; //Infinity;
+    console.log(points);
+    console.log("mindist", minDist);
+    const pxs = px; //px / canvas.height;
+    console.log("pxs", pxs);
     points.forEach((p, index) => {
-        const dist = Math.abs(p - px);
+        const dist = Math.abs(p - pxs);
+	console.log("dist", dist);
         if (dist < minDist) {
             minDist = dist;
             closestIndex = index;
@@ -117,18 +176,61 @@ function findClosestPoint(px) {
     return closestIndex;
 }
 
+function getPosition1(e) {
+    const rect = canvas.getBoundingClientRect();
+    let x;
+    if (e.touches) {
+        x = e.touches[0].clientX - rect.left;
+    } else {
+        x = e.clientX - rect.left;
+    }
+    return Math.max(0, Math.min(1, x / canvas.width)); // Clamp 0-1
+}
+function getPosition(e) {
+    const rect = canvas.getBoundingClientRect();
+    let x;
+
+    if (e.touches) {
+        x = e.touches[0].clientY - rect.top;
+    } else {
+        x = e.clientY - rect.top;
+    }
+    return Math.max(0, Math.min(1, x / canvas.height)); // Clamp 0-1
+}
+let lastTap = 0;
 
 function down(e) {
-    const px = getPointFromEvent(e);
+
+    const curTime = new Date().getTime();
+    const tapLen = curTime - lastTap;
+    console.log(tapLen, curTime);
+    if (tapLen < 500 && tapLen > 0) {
+	console.log('Double tapped!');
+	doubleclick(e);
+    } else {
+	simpleclick(e);
+    }
+    lastTap = curTime;    
+}
+
+function simpleclick(e) {
+    var px = getPointFromEvent(e);
+    e.preventDefault();
+    const pos = getPosition(e);
+    px = pos;
     draggedIndex = findClosestPoint(px);
+    console.log("dragged", draggedIndex);
     if (draggedIndex === -1 && e.offsetX / canvas.width < 0.05) draggedIndex = 0; // Bord gauche
     upload(true);    
     draw();
 }
 
 function move(e) {
+    //console.log("move");
+    //console.log(e)    
     if (draggedIndex !== -1) {
-        points[draggedIndex] = getPointFromEvent(e);
+        //points[draggedIndex] = getPointFromEvent(e);
+        points[draggedIndex] = getPosition(e);
         // Éviter doublons et tri implicite
         points = points.filter((p, i) => i !== draggedIndex || true).sort((a, b) => a - b);
 	//upload();
@@ -137,7 +239,7 @@ function move(e) {
 }   
 function up() {
     draggedIndex = -1;
-    clean();
+    console.log("up");
     draw();    
     upload(true);
     //reload();
@@ -175,26 +277,45 @@ function reload() {
 	    let response = xhr1.response;
 	    let buf = response;
             //eko(buf);
-            //eko(response);
+            console.log(response);//eko(response);
 	    points = response;
+	    points = [0.2, 0.4, 0.6, 0.8]; // Segments initiaux
+
 	}
     }
     //draw()
 }
 
 function doubleclick(e) {
-    const px = getPointFromEvent(e);
-    if (!points.includes(px)) {
-        points.push(px);
-	upload(true);
-        points.sort((a, b) => a - b);
-        draw();
+    var px = getPointFromEvent(e);
+    e.preventDefault();
+    const pos = getPosition(e);
+    console.log(px)
+    console.log(pos)
+    px = pos;
+
+    const closest = findClosestPoint(px);
+    if (closest != -1) {
+	console.log("suppress", closest);
+	suppress(e)
+    } else {
+	console.log("add");
+	if (!points.includes(px)) {
+            points.push(px);
+	    upload(true);
+            points.sort((a, b) => a - b);
+            draw();
+	}
     }
 }
 
 function suppress(e) {
     e.preventDefault();
-    const px = getPointFromEvent(e);
+    var px = getPointFromEvent(e);
+    e.preventDefault();
+    const pos = getPosition(e);
+    px = pos;
+    
     const index = findClosestPoint(px);
     if (index !== -1) {
         points.splice(index, 1);
@@ -214,7 +335,7 @@ canvas.addEventListener('touchend', up);
 
 
 // Ajout de point par double-clic
-canvas.addEventListener('dblclick', doubleclick);
+//canvas.addEventListener('dblclick', doubleclick);
 
 
 // Suppression par clic droit
