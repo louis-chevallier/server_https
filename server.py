@@ -291,6 +291,18 @@ class AppChaudiere(app.App0) :
 
 			#EKO()
 
+	@cherrypy.expose
+	def get_data(self):
+		sd = json.dumps(self.d)
+		EKOX(self.d)
+		return sd
+
+	@cherrypy.expose
+	def set_data(self, data):
+		self.d = json.loads(data)
+		EKOX(self.d)
+		return self.get_data()
+
 			
 	@cherrypy.expose
 	def test(self):
