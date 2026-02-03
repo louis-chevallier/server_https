@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title> Programme journalier Chaudière</title>
+    
+    <style>
+        canvas { border: 1px solid #ccc; cursor: pointer; }
+        #info { margin-top: 10px; font-family: Arial; }
+	body { font-size: 100px; }
+	input { font-size: 100px; }                        
+	@media only screen and (max-width: 600px) {
+            body { font-size: 32px; }
+            input { font-size: 32px; }                    
+	}
+	
+    </style>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>    
+</head>
+<body>
+    <canvas id="canvas" width="800" height="200"></canvas>
+    <div id="info">Cliquez pour ajouter un point, glissez pour affiner les segments.</div>
+    <script src="http://MYIP:8092/js/lclog.js"></script>
+    <script type="module" src='code.js'>    </script>
+  
+
+</body>
+</html>

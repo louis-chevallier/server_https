@@ -40,6 +40,7 @@ utillc.default_opt["with_date"] = 1
 
 ezvizDir = os.path.join(app.localDir, "ezviz")
 linkyDir = os.path.join(app.localDir, "linky")
+chaudiereDir = os.path.join(app.localDir, "chaudiere")
 port = 8092
 if "PORT" in os.environ :
 	port = int(os.environ["PORT"])
@@ -69,6 +70,13 @@ config_linky = {
 	'/' : {
 		'tools.staticdir.on': True,
 		'tools.staticdir.dir': os.path.join(app.fileDir, 'linky'),
+	}
+}
+
+config_chaudiere = {
+	'/' : {
+		'tools.staticdir.on': True,
+		'tools.staticdir.dir': os.path.join(app.fileDir, 'chaudiere'),
 	}
 }
 
@@ -253,6 +261,57 @@ class AppLinky(app.App0) :
 			#EKOX(data)			   
 			return data
 
+class AppChaudiere(app.App0) :
+	url = "http://192.168.1.55/data_linky"
+	T = 1 # second
+	K = 3000
+	S = 3600*24*7
+	MAX_LEN = S # sliding over 1 week
+	def __init__(self) :
+		super(AppChaudiere, self).__init__()		
+		EKOT("app chaudiere init")
+		self.d = {
+			"values" : [],
+			"interval_sec" : self.T,
+			"date" : str(datetime.datetime.now()) # date of first record
+		}
+		
+		thread = threading.Thread(target=self.daemon_chaudiere, args=())
+		thread.daemon = True							# Daemonize thread
+		thread.start()									# Start the execution
+
+
+	def daemon_chaudiere(self):
+		EKOT("daemon")
+		while 1 :
+			#EKOX(self.url)
+			# called every T seconds
+			inst,pp = 0, 0
+			#EKO()
+
+			#EKO()
+
+			
+	@cherrypy.expose
+	def test(self):
+		EKOT(" ==================== TEST =====================")
+		return 'ok'
+
+	def mount(self) :
+		EKO()
+		cherrypy.tree.mount(self, '/chaudiere', config_chaudiere)
+			
+	@cherrypy.expose
+	def index(self):
+		EKO()
+		with open(os.path.join(chaudiereDir, "index.html"), "r") as file :
+			EKOT("main")
+			data = file.read()
+			data = data.replace("INFO", self.info())
+			data = data.replace("MYIP", app.MYIP)
+			#EKOX(data)			   
+			return data
+
 	
 	
 config2 = {
@@ -280,6 +339,7 @@ def go() :
 
 	apprunning, appezviz = AppRunning(), AppEZviz(app0)
 	appLinky = AppLinky()
+	appChaudiere = AppChaudiere()
 	appGPS = gps.AppGPS()
 	appServo = servo.AppServo()
 
