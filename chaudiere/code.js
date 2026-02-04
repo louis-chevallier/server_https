@@ -2,6 +2,9 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const info = document.getElementById('info');
 const log = document.getElementById('log');
+const next = document.getElementById('next');
+const text = document.getElementById('text');
+const new_  = document.getElementById('new');
 var timer = 0;
 
 log.innerHTML = "version 3"
@@ -235,6 +238,8 @@ function move(e) {
         points = points.filter((p, i) => i !== draggedIndex || true).sort((a, b) => a - b);
 	//upload();
         draw();
+	const txt = fractionToTime(points[draggedIndex])
+	text.innerHTML = txt
     }
 }   
 function up() {
@@ -265,7 +270,7 @@ function upload(doreload) {
     }
 }
 
-function reload() {
+function reload(fff) {
     const xhr1 = new XMLHttpRequest();
     xhr1.open("GET", "get_data");
     xhr1.send();
@@ -280,7 +285,7 @@ function reload() {
             console.log(response);//eko(response);
 	    points = response;
 	    points = [0.2, 0.4, 0.6, 0.8]; // Segments initiaux
-
+	    fff
 	}
     }
     //draw()
@@ -324,6 +329,59 @@ function suppress(e) {
     }
 }
 
+function fct_next() {
+    const xhr1 = new XMLHttpRequest();
+    xhr1.open("GET", "next");
+    xhr1.responseType = "json";
+    xhr1.onload = () => {
+	//eko("data received")
+        let dates = [];
+	if (xhr1.readyState == 4 && xhr1.status == 200) {
+	    let response = xhr1.response;
+	    let buf = response;
+
+            console.log('next response', response);//eko(response);
+	    points = response;
+	    draw()
+	    const xhr2 = new XMLHttpRequest();
+	    xhr2.open("GET", "idx");
+	    xhr2.responseType = "json";
+	    xhr2.onload = () => {
+		if (xhr2.readyState == 4 && xhr2.status == 200) {
+		    let response = xhr2.response;
+		    let buf = response;
+		    //eko(buf);
+		    console.log(response);//eko(response);
+		    log.innerHTML = response
+		}
+	    }
+	    xhr2.send()
+	}
+    }
+    xhr1.send();
+    
+}
+
+function fct_new() {
+    const xhr1 = new XMLHttpRequest();
+    xhr1.open("GET", "new");
+    xhr1.send();
+    xhr1.responseType = "json";
+    xhr1.onload = () => {
+	//eko("data received")
+        let dates = [];
+	if (xhr1.readyState == 4 && xhr1.status == 200) {
+	    let response = xhr1.response;
+	    let buf = response;
+            //eko(buf);
+            console.log(response);//eko(response);
+	    points = response;
+	    draw()
+	}
+    }
+}
+
+
 canvas.addEventListener('mousedown', down)
 canvas.addEventListener('mousemove', move);
 canvas.addEventListener('mouseup', up);
@@ -333,6 +391,13 @@ canvas.addEventListener('touchstart', down, { passive: false });
 canvas.addEventListener('touchmove', move, { passive: false });
 canvas.addEventListener('touchend', up);
 
+next.addEventListener('click', function (event) {
+    fct_next();
+});
+
+new_.addEventListener('click', function (event) {
+    fct_new();
+});
 
 // Ajout de point par double-clic
 //canvas.addEventListener('dblclick', doubleclick);
@@ -346,7 +411,7 @@ function refresh() {
     //draw()
     //timer = setInterval(refresh, 1000 ); // 1 sec    
 }
-reload()
+reload(draw)
 timer = setInterval(refresh, 1000 ); // 1 sec
 
 draw(); // Dessin initial

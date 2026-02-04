@@ -267,6 +267,10 @@ class AppChaudiere(app.App0) :
 	K = 3000
 	S = 3600*24*7
 	MAX_LEN = S # sliding over 1 week
+
+	def delf(self) :
+			return [0.2, 0.4, 0.6, 0.8]
+	
 	def __init__(self) :
 		super(AppChaudiere, self).__init__()		
 		EKOT("app chaudiere init")
@@ -279,7 +283,8 @@ class AppChaudiere(app.App0) :
 		thread = threading.Thread(target=self.daemon_chaudiere, args=())
 		thread.daemon = True							# Daemonize thread
 		thread.start()									# Start the execution
-
+		self.progs = [ self.delf() ]
+		self.i = 0
 
 	def daemon_chaudiere(self):
 		EKOT("daemon")
@@ -293,15 +298,39 @@ class AppChaudiere(app.App0) :
 
 	@cherrypy.expose
 	def get_data(self):
-		get = sd = json.dumps(self.d)
-		EKOX(get)
-		return sd
+			EKO()
+			get = sd = json.dumps(self.progs[self.i])
+			EKOX(get)
+			return sd
+	
+	@cherrypy.expose
+	def idx(self):
+			EKO()
+			d = [ self.i ]
+			EKOX(d)			
+			return json.dumps(d)
+
+	@cherrypy.expose
+	def next(self):
+			EKO()
+			self.i = (self.i + 1) % len(self.progs)
+			EKO()
+			return self.get_data()
+
+	@cherrypy.expose
+	def new(self):
+			EKO()
+			self.progs.append(self.delf())
+			self.next()
+			EKO()
+			return self.get_data()
 
 	@cherrypy.expose
 	def set_data(self, data):
-		sset = self.d = json.loads(data)
-		EKOX(sset)
-		return 'ok'
+			EKOX(self.i)
+			sset = self.progs[self.i] = json.loads(data)
+			EKOX(sset)
+			return 'ok'
 
 			
 	@cherrypy.expose
