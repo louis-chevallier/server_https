@@ -29,5 +29,12 @@ lancer Ezviz studio derrier le proxy
 
 l'approche lancer wine derriere un proxy
 
+## copy du server sur infinitree
+ftp : 185.27.134.11
+user : if0_37888849
+pwd : tGnY3PtbABp
+
+
+
 
 

@@ -48,36 +48,36 @@ garage_fn = "/deploy/data/garage.pickle"
 
 class App0 :
 	def __init__(self) :
-		EKOT("app init")
-		apps.append(self)
+		    EKOT("app init")
+		    apps.append(self)
 
 	def mount(self) :
-		EKO()
+		    EKO()
 		pass
-	
+
 	def info(self) :
 		def read(gi) :
-			i = os.environ[gi] if gi in os.environ else ""
+			    i = os.environ[gi] if gi in os.environ else ""
 			return gi + "=" + i
 		return read('GITINFO') + ", " + read("HOST") + ", " + read("DATE")
 
 	@cherrypy.expose
 	def log(self, data=None) :
-		#EKO()
-		p = urlparse(data);
-		rp = os.path.relpath(p.path, start = "/")
-		print(rp)
+		    #EKO()
+		    p = urlparse(data);
+		    rp = os.path.relpath(p.path, start = "/")
+		    print(rp)
 
 	
 class App(App0) :
-	"""
-	the Webserver
-	"""
+	    """
+	    the Webserver
+	    """
 	def __init__(self) :
-		super(App, self).__init__()				   
-		EKOT("app init")
-		apps.append(self)
-		self.audio_list()
+		    super(App, self).__init__()				   
+		    EKOT("app init")
+		    apps.append(self)
+		    self.audio_list()
 
 		self.nmScan = nmap.PortScanner()
 		thread = threading.Thread(target=self.daemon, args=())
@@ -91,6 +91,7 @@ class App(App0) :
 		self.changed_mode = 0		
 
 	def daemon(self):
+
 		EKOT("daemon")
 		version = 1
 		while 1 :

@@ -532,9 +532,7 @@ function blink() {
     //console.log(last_time)
     if (running_data.runs[i_run()].t.length > 0 || last_time === undefined || (dd.getTime() - last_time.getTime()) > 1000) {
         function showPosition(position) {
-            //console.log("show pos")
-
-
+            console.log("show pos")
             //add_rec(position.coords.latitude, position.coords.longitude, position.coords.altitude)
         }        
         navigator.geolocation.getCurrentPosition(showPosition);        
@@ -590,9 +588,17 @@ function do_record() {
     if (t.value == "Record") {
         t.value = "Stop";
         running_data.runs[get_trace_name()] = cook(0)
-        watch_gps = navigator.geolocation.watchPosition((position) => {
-            add_rec(position.coords.latitude, position.coords.longitude, position.coords.altitude);
-        });
+        watch_gps = navigator.geolocation.watchPosition(
+            (position) => {
+                console.log("watch");
+                add_rec(position.coords.latitude, position.coords.longitude, position.coords.altitude);
+            },
+            () => {},
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            });
         
         timer = setInterval(blink, 1000 ); // 1 sec
         (async() => {
