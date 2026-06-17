@@ -246,6 +246,7 @@ class App(App0) :
 
 			data += "<br> Devices : " + ",".join(self.devices_connected)
 			#EKOX(data)
+			EKO()
 			return data
 
 	@cherrypy.expose
