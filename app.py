@@ -3,7 +3,7 @@ from utillc import *
 import argparse, pickle, os, sys, json
 from datetime import datetime, timezone
 import os, time, glob
-import numpy as np      
+import numpy as np		
 import pandas as pd
 import numpy as np, matplotlib.pyplot as plt, sys; 
 
@@ -36,7 +36,7 @@ MYIP = os.environ["MYIP"]
 
 
 apps = []
-#mon tel :  e0:dc:ff:ec:d6:89 	Android-3 	192.168.1.72 	CHEVALLIER_BORDEAU 	2.4GHz 
+#mon tel :	e0:dc:ff:ec:d6:89	Android-3	192.168.1.72	CHEVALLIER_BORDEAU	2.4GHz 
 tel_louis_ip = "192.168.1.72"
 tels = ["tel_louis", "Galaxy-A51", "S20-FE-de-David-001" ]
 tels = [
@@ -48,36 +48,36 @@ garage_fn = "/deploy/data/garage.pickle"
 
 class App0 :
 	def __init__(self) :
-		    EKOT("app init")
-		    apps.append(self)
+			EKOT("app init")
+			apps.append(self)
 
 	def mount(self) :
-		    EKO()
+			EKO()
 			pass
 
 	def info(self) :
 		def read(gi) :
-			    i = os.environ[gi] if gi in os.environ else ""
+				i = os.environ[gi] if gi in os.environ else ""
 			return gi + "=" + i
 		return read('GITINFO') + ", " + read("HOST") + ", " + read("DATE")
 
 	@cherrypy.expose
 	def log(self, data=None) :
-		    #EKO()
-		    p = urlparse(data);
-		    rp = os.path.relpath(p.path, start = "/")
-		    print(rp)
+			#EKO()
+			p = urlparse(data);
+			rp = os.path.relpath(p.path, start = "/")
+			print(rp)
 
 	
 class App(App0) :
-	    """
-	    the Webserver
-	    """
+		"""
+		the Webserver
+		"""
 	def __init__(self) :
-		    super(App, self).__init__()				   
-		    EKOT("app init")
-		    apps.append(self)
-		    self.audio_list()
+			super(App, self).__init__()				   
+			EKOT("app init")
+			apps.append(self)
+			self.audio_list()
 
 		self.nmScan = nmap.PortScanner()
 		thread = threading.Thread(target=self.daemon, args=())
@@ -118,8 +118,8 @@ class App(App0) :
 								EKOX(ex);
 								pass
 			else :
-				#EKO()                    
-				self.devices_connected.clear()                    
+				#EKO()					  
+				self.devices_connected.clear()					  
 
 				for ee, ip in tels :
 					try :
@@ -371,7 +371,7 @@ def ppp(self) :
 
 	p  = pd.read_csv("presence.csv", delimiter=";")
 	l = [ (datetime.fromisoformat(row.iloc[0] + "+02:00"), row.iloc[1]) for index, row in p.iterrows()]
-	dates =  [ e[0] for e in l]
+	dates =	 [ e[0] for e in l]
 	EKOX(len(dates))
 	dates2 =  [ v for e in l for v in [ e[0], e[0]] ]
 	EKOX(len(dates))
