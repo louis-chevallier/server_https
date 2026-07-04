@@ -58,7 +58,7 @@ class App0 :
 	def info(self) :
 		def read(gi) :
 				i = os.environ[gi] if gi in os.environ else ""
-			return gi + "=" + i
+				return gi + "=" + i
 		return read('GITINFO') + ", " + read("HOST") + ", " + read("DATE")
 
 	@cherrypy.expose
@@ -70,14 +70,14 @@ class App0 :
 
 	
 class App(App0) :
-		"""
+	"""
 		the Webserver
-		"""
+	"""
 	def __init__(self) :
-			super(App, self).__init__()				   
-			EKOT("app init")
-			apps.append(self)
-			self.audio_list()
+		super(App, self).__init__()				   
+		EKOT("app init")
+		apps.append(self)
+		self.audio_list()
 
 		self.nmScan = nmap.PortScanner()
 		thread = threading.Thread(target=self.daemon, args=())
