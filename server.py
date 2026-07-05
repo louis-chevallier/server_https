@@ -56,6 +56,8 @@ config_running = {
 	'/' : {
 		'tools.staticdir.on': True,
 		'tools.staticdir.dir': os.path.join(app.fileDir, 'running'),
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [ ('Access-Control-Allow-Origin', 'http://127.0.0.1:8000', 'https://louis-chevallier.github.io/')]
 	}
 }
 
