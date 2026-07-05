@@ -15,8 +15,27 @@ config_GPS = {
     '/' : {
         'tools.staticdir.on': True,
         'tools.staticdir.dir': os.path.join(app.fileDir, 'gps'),
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [ ('Access-Control-Allow-Origin', 'http://127.0.0.1:8000')]		
     }
 }
+
+# Source - https://stackoverflow.com/a/41004271
+# Posted by ccarton
+# Retrieved 2026-07-05, License - CC BY-SA 3.0
+
+if __name__ == '__main__':
+    conf = {
+        '/': {
+            'tools.response_headers.on': True,
+            'tools.response_headers.headers': [('Content-Type', 'image/jpeg'), ('Access-Control-Allow-Origin', 'http://my_ip')],
+            'server.socket_host': 'my_ip',
+            'server.socket_port': 8888
+        }
+    }
+    cherrypy.quickstart(Camera(), '/', conf)
+
+
 
 class AppGPS(app.App0) :
     def __init__(self) :
