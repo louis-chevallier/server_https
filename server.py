@@ -54,12 +54,15 @@ import servo
 			
 config_running = {
 	'/' : {
-		'tools.staticdir.on': True,
-		'tools.staticdir.dir': os.path.join(app.fileDir, 'running'),
-        'tools.response_headers.on': True,
-        'tools.response_headers.headers': [ ('Access-Control-Allow-Origin', 'http://127.0.0.1:8000', 'https://louis-chevallier.github.io/')]
+			'tools.staticdir.on': True,
+			'tools.staticdir.dir': os.path.join(app.fileDir, 'running'),
+			'tools.response_headers.on': True,
+			'tools.response_headers.headers': [ ('Access-Control-Allow-Origin', 'https://louis-chevallier.github.io/')],
+			'tools.response_headers.headers': [ ('Access-Control-Allow-Origin', 'http://localhost')],
+			'tools.response_headers.headers': [ ('Access-Control-Allow-Origin', 'http://127.0.0.1:8000')]
 	}
 }
+
 
 config_ezviz = {
 	'/' : {
@@ -362,6 +365,8 @@ config2 = {
 	"gitinfo" : "info"
 }
 
+def CORS():		cherrypy.response.headers["Access-Control-Allow-Origin"] = "*" # mean: CORS to all; insert spec. origin to allow spec access
+
 def go() :
 	app0 = app.App()
 	cherrypy.log.error_log.propagate = False
@@ -391,13 +396,25 @@ def go() :
 		EKOX(e)
 		e.mount()
 	
-	
-	#cherrypy.tree.mount(app, '/', config)
+	EKO()
 
+	EKO()
+	cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
+
+	# insert tool declaration within def main() or even directly
+	# before cherrypy.tree.mount command to prevent Error like
+	# >>TypeError: The 'CORS' Tool does not accept positional arguments; you must
+	#use keyword arguments.
+	#cherrypy.tree.mount(root,'/', config = application_conf) ...
+	
+	cherrypy.tree.mount(app, '/', config)
+	EKO()
+
+	
 	cherrypy.config.update({
 		'server.thread_pool': 100
 	})
-
+	EKO()
 	cherrypy.tree.mount(apprunning, '/running', config_running)	 
 	
 	EKOT("quickstart ..")

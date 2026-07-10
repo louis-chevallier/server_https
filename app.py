@@ -1,3 +1,4 @@
+import shelve
 import pytz
 from utillc import *
 import argparse, pickle, os, sys, json
@@ -46,7 +47,10 @@ tels = [
 garage_fn = "/deploy/data/garage.pickle"
 
 
+zero = "0000"
+
 class App0 :
+	storage = "object_store"
 	def __init__(self) :
 			EKOT("app init")
 			apps.append(self)
@@ -68,11 +72,30 @@ class App0 :
 			rp = os.path.relpath(p.path, start = "/")
 			print(rp)
 
+	@cherrypy.expose
+	def UpdateValue(self, app_key, key, value):
+		EKOT(" ==================== TEST =====================")
+		if (app_key == zero) :
+				pass
+		with shelve.open(self.storage) as db:
+				db[key] = value		
+		return 'ok'
+
+	@cherrypy.expose
+	def GetValue(self, app_key, key):
+		EKOT(" ==================== TEST =====================")
+		ret = None
+		if (app_key == zero) :
+				with shelve.open(self.storage) as db:
+						ret = db[key] if key in db else None
+		# pour etre compatible avec keyval server
+		return '"' + ret + '"'
 	
 class App(App0) :
 	"""
 		the Webserver
 	"""
+
 	def __init__(self) :
 		super(App, self).__init__()				   
 		EKOT("app init")
@@ -253,6 +276,7 @@ class App(App0) :
 	def test(self):
 		EKOT(" ==================== TEST =====================")
 		return 'ok'
+
 
 	@cherrypy.expose
 	def get_alarm_mode(self):
